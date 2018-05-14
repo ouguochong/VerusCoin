@@ -56,10 +56,13 @@ install:
 before_script:
     - if [ $TRAVIS_OS_NAME = linux ]; then unset CC; unset CXX; fi
     - if [ $TRAVIS_OS_NAME = linux ]; then mkdir -p depends/SDKs depends/sdk-sources; fi
+
 script:
     - ./zcutil/fetch-params.sh
     - ./zcutil/$BSCRIPT -j2
+
 after_script:
 - echo "####################################################################DONE####################################################"
+
 notifications:
    slack: $(NOTIFICATION_TARGET)
