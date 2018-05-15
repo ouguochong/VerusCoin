@@ -35,7 +35,7 @@ matrix:
         TARGET=x86_64-apple-darwin
         BSCRIPT=build-mac.sh
         TRAVIS_OS_NAME=osx
-        PACKAGES="binutils protobuf autogen xcode"
+        PACKAGES="binutils protobuf autogen coreutils"
     - compiler: ": Windows"
       env: >
         HOST=x86_64-w64-mingw32
