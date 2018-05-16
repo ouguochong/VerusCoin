@@ -28,15 +28,15 @@ matrix:
         TRAVIS_OS_NAME=linux
         PACKAGES="build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev curl" PPA="ppa:chris-lea/zeromq"
 
-    - compiler: ": Mac"
-      os: osx
-      osx_image: xcode9.3-moar
-      env: >
-        HOST=x86_64-apple-darwin11
-        TARGET=x86_64-apple-darwin
-        BSCRIPT=build-mac.sh
-        TRAVIS_OS_NAME=osx
-        PACKAGES="binutils protobuf autogen coreutils"
+  #  - compiler: ": Mac"
+  #    os: osx
+  #    osx_image: xcode9.3-moar
+  #    env: >
+  #      HOST=x86_64-apple-darwin11
+  #      TARGET=x86_64-apple-darwin
+  #      BSCRIPT=build-mac.sh
+  #     TRAVIS_OS_NAME=osx
+  #      PACKAGES="binutils protobuf autogen coreutils"
 
     - compiler: ": Windows"
       env: >
