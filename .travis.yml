@@ -71,4 +71,4 @@ script:
     - if [ "$RUN_TESTS" = "true" ]; then make check; fi
     - if [ "$RUN_TESTS" = "true" ]; then qa/pull-tester/rpc-tests.sh; fi
 after_script:
-- if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then echo "READY TO DEPLOY!" || echo "upload failed"); fi
+- if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then (echo "READY TO DEPLOY!" || echo "upload failed"); fi
