@@ -52,8 +52,8 @@ matrix:
     - compiler: gcc
 install:
     - echo "ENVIRONMENT PRINT"
-    - echo $(TRAVIS_BUILD_DIR)
-    - echo $(TRAVIS_BUILD_ID)
+    - echo printenv
+    - printenv
     - if [ -n "$PACKAGES" ]; then sudo rm -f /etc/apt/sources.list.d/travis_ci_zeromq3-source.list; fi
     - if [ -n "$PACKAGES" ]; then travis_retry sudo apt-get update; fi
     - if [ -n "$PACKAGES" ]; then travis_retry sudo apt-get install --no-install-recommends --no-upgrade -qq $PACKAGES; fi
