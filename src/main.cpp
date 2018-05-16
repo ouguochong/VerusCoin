@@ -3999,7 +3999,6 @@ bool ContextualCheckBlock(const CBlock& block, CValidationState& state, CBlockIn
 {
     const int nHeight = pindexPrev == NULL ? 0 : pindexPrev->nHeight + 1;
     const Consensus::Params& consensusParams = Params().GetConsensus();
-    bool checkBlockOne = (nHeight == 1);
     
     // Check that all transactions are finalized
     BOOST_FOREACH(const CTransaction& tx, block.vtx) {
@@ -4087,7 +4086,7 @@ bool AcceptBlockHeader(int32_t *futureblockp,const CBlockHeader& block, CValidat
                 komodo_requestedhash = block.hashPrevBlock;
                 komodo_requestedcount = 0;
             }*/
-            LogPrintf("AcceptBlockHeader hashPrevBlock %s not found\n",block.hashPrevBlock.ToString().c_str());
+            LogPrintf("AcceptBlockHeader %s\n hashPrevBlock %s not found\n", hash.ToString().c_str(), block.hashPrevBlock.ToString().c_str());
             return(false);
             //return state.DoS(10, error("%s: prev block not found", __func__), 0, "bad-prevblk");
         }
@@ -4139,7 +4138,7 @@ bool AcceptBlock(int32_t *futureblockp,CBlock& block, CValidationState& state, C
     AssertLockHeld(cs_main);
     
     CBlockIndex *&pindex = *ppindex;
-    if (!AcceptBlockHeader(futureblockp,block, state, &pindex))
+    if (!AcceptBlockHeader(futureblockp, block, state, &pindex))
     {
         if ( *futureblockp == 0 )
         {
@@ -4343,7 +4342,7 @@ bool ProcessNewBlock(bool from_miner,int32_t height,CValidationState &state, CNo
         if ( 1 )
         {
             // without the komodo_ensure call, it is quite possible to get a non-error but null pindex returned from AcceptBlockHeader. In a 2 node network, it will be a long time before that block is reprocessed. Even though restarting makes it rescan, it seems much better to keep the nodes in sync
-            komodo_ensure(pblock,hash);
+            komodo_ensure(pblock, hash);
         }
         bool ret = AcceptBlock(&futureblock,*pblock, state, &pindex, fRequested, dbp);
         if (pindex && pfrom) {
@@ -6015,7 +6014,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             if (pindex)
                 pindex = chainActive.Next(pindex);
         }
-        
+
         // we must use CBlocks, as CBlockHeaders won't include the 0x00 nTx count at the end
         vector<CBlock> vHeaders;
         int nLimit = MAX_HEADERS_RESULTS;
@@ -6025,6 +6024,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             pfrom->lasthdrsreq = (int32_t)(pindex ? pindex->nHeight : -1);
             for (; pindex; pindex = chainActive.Next(pindex))
             {
+                CBlockHeader h = pindex->GetBlockHeader();
+                printf("size.%i, solution size.%i", (int)sizeof(h), (int)h.nSolution.size());
                 vHeaders.push_back(pindex->GetBlockHeader());
                 if (--nLimit <= 0 || pindex->GetBlockHash() == hashStop)
                     break;

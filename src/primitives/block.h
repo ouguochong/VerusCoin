@@ -25,7 +25,6 @@ public:
     static const size_t HEADER_SIZE=4+32+32+32+4+4+32; // excluding Equihash solution
     static const int32_t CURRENT_VERSION=4;
     static uint256 (CBlockHeader::*hashFunction)() const;
-    
     static void SetHashAlgo();
 
     int32_t nVersion;
@@ -76,7 +75,10 @@ public:
 
     uint256 GetHash() const
     {
-        return (this->*hashFunction)();
+        if (hashPrevBlock.IsNull())
+            return (this->GetSHA256DHash());
+        else
+            return (this->*hashFunction)();
     }
 
     uint256 GetSHA256DHash() const;
