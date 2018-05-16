@@ -830,14 +830,24 @@ void static VerusStaker(CWallet *pwallet)
     waitForPeers(chainparams);
     // try a nice clean peer connection to start
     waitForPeers(chainparams);
-    CBlockIndex* pindexPrev;
+    CBlockIndex* pindexPrev, *pindexCur;
     do {
-        pindexPrev = chainActive.Tip();
+        {
+            LOCK(cs_main);
+            pindexPrev = chainActive.Tip();
+        }
         MilliSleep(5000 + rand() % 5000);
-    } while (pindexPrev != chainActive.Tip());
+        {
+            LOCK(cs_main);
+            pindexCur = chainActive.Tip();
+        }
+    } while (pindexPrev != pindexCur);
 
     sleep(5);
-    printf("Staking height %d for %s\n", chainActive.Tip()->nHeight + 1, ASSETCHAINS_SYMBOL);
+
+    {
+        printf("Staking height %d for %s\n", chainActive.Tip()->nHeight + 1, ASSETCHAINS_SYMBOL);
+    }
     //fprintf(stderr,"Staking height %d for %s\n", chainActive.Tip()->nHeight + 1, ASSETCHAINS_SYMBOL);
 
     miningTimer.start();
@@ -895,11 +905,12 @@ void static VerusStaker(CWallet *pwallet)
             //
             int64_t nStart = GetTime();
 
+            // take up the necessary space for alignment
+            pblock->nSolution = solnPlaceholder;
+
             // we don't use this, but IncrementExtraNonce is the function that builds the merkle tree
             unsigned int nExtraNonce = 0;
             IncrementExtraNonce(pblock, pindexPrev, nExtraNonce);
-
-            pblock->nSolution = solnPlaceholder;
 
             if (vNodes.empty() && chainparams.MiningRequiresPeers())
             {
@@ -1004,11 +1015,18 @@ void static BitcoinMiner_noeq()
 
     // try a nice clean peer connection to start
     waitForPeers(chainparams);
-    CBlockIndex* pindexPrev;
+    CBlockIndex *pindexPrev, *pindexCur;
     do {
-        pindexPrev = chainActive.Tip();
+        {
+            LOCK(cs_main);
+            pindexPrev = chainActive.Tip();
+        }
         MilliSleep(5000 + rand() % 5000);
-    } while (pindexPrev != chainActive.Tip());
+        {
+            LOCK(cs_main);
+            pindexCur = chainActive.Tip();
+        }
+    } while (pindexPrev != pindexCur);
 
     printf("Mining height %d\n", chainActive.Tip()->nHeight + 1);
 
