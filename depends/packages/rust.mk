@@ -5,7 +5,7 @@ ifeq ($(build_os),darwin)
 $(package)_file_name=rust-$($(package)_version)-x86_64-apple-darwin.tar.gz
 $(package)_sha256_hash=2d08259ee038d3a2c77a93f1a31fc59e7a1d6d1bbfcba3dba3c8213b2e5d1926
 else ifeq ($(host_os),mingw32)
-$(package)_file_name=rust-$($(package)_version)-i686-unknown-linux-gnu.tar.gz
+$(package)_file_name=rust-$($(package)_version)i686-unknown-linux-gnu.tar.gz
 $(package)_sha256_hash=b5859161ebb182d3b75fa14a5741e5de87b088146fb0ef4a30f3b2439c6179c5
 else
 $(package)_file_name=rust-$($(package)_version)-x86_64-unknown-linux-gnu.tar.gz
