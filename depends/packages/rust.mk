@@ -1,6 +1,6 @@
 package=rust
 $(package)_version=1.16.0
-$(package)_download_path=https://static.rust-lang.org/dist/
+$(package)_download_path=https://static.rust-lang.org/dist
 ifeq ($(build_os),darwin)
 $(package)_file_name=rust-$($(package)_version)-x86_64-apple-darwin.tar.gz
 $(package)_sha256_hash=2d08259ee038d3a2c77a93f1a31fc59e7a1d6d1bbfcba3dba3c8213b2e5d1926
