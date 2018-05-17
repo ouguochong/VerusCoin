@@ -53,8 +53,8 @@ matrix:
 install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo rm -f /etc/apt/sources.list.d/travis_ci_zeromq3-source.list; fi
   - if [ $TRAVIS_OS_NAME = linux ]; then travis_retry sudo apt-get -y update && sudo apt-get -y install -qq $PACKAGES; fi
-  - if [ $TRAVIS_OS_NAME = linux ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH; fi
-  - if [ $BSCRIPT = build-win.sh ]; then rustup target add $TARGET; fi
+  #- if [ $TRAVIS_OS_NAME = linux ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH; fi
+  #- if [ $BSCRIPT = build-win.sh ]; then rustup target add $TARGET; fi
   #- if [ $TRAVIS_OS_NAME = osx ]; then brew upgrade python; fi
   #- if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew tap discoteq/discoteq && brew install flock; fi
   #- if [ $TRAVIS_OS_NAME = osx ]; then rm '/usr/local/include/c++' && travis_retry brew tap homebrew/homebrew-core && brew install homebrew/homebrew-core/gcc@5 --overwrite gcc@5; fi
@@ -63,7 +63,8 @@ install:
 before_script:
     - unset CC; unset CXX
     - mkdir -p depends/SDKs depends/sdk-sources
-    - if [ -n "$OSX_SDK" -a ! -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then curl --location --fail $SDK_URL/MacOSX${OSX_SDK}.sdk.tar.gz -o depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
+    - if [ -n "$OSX_SDK" -a ! -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then \
+        curl --location --fail $SDK_URL/MacOSX${OSX_SDK}.sdk.tar.gz -o depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
     - if [ -n "$OSX_SDK" -a -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then tar -C depends/SDKs -xzf depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
     - if [ $TRAVIS_OS_NAME = linux ]; then mkdir -p depends/SDKs depends/sdk-sources; fi
 
