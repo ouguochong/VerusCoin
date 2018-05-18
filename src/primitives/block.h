@@ -75,10 +75,7 @@ public:
 
     uint256 GetHash() const
     {
-        if (hashPrevBlock.IsNull())
-            return (this->GetSHA256DHash());
-        else
-            return (this->*hashFunction)();
+        return (this->*hashFunction)();
     }
 
     uint256 GetSHA256DHash() const;
@@ -104,7 +101,7 @@ public:
         return nBits;
     }
 
-    bool isVerusPOSBlock() const
+    bool IsVerusPOSBlock() const
     {
         arith_uint256 arNonce = UintToArith256(nNonce);
         arith_uint256 tmpNonce = ((arNonce << 128) >> 128);
