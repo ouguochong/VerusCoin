@@ -17,7 +17,7 @@ env:
     - SDK_URL=https://bitcoincore.org/depends-sources/sdks
 
 cache:
-  apt: false
+  apt: true
   directories:
   - depends/built
   - depends/sdk-sources
