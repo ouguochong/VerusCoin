@@ -38,7 +38,7 @@ matrix:
         TARGET=x86_64-apple-darwin
         BSCRIPT=build-mac.sh
         TRAVIS_OS_NAME=osx
-        PACKAGES="cmake libcap-dev libz-dev libbz2-dev binutils protobuf autogen automake coreutils"
+        PACKAGES="cmake curl libcap-dev libz-dev libbz2-dev binutils protobuf autogen automake coreutils"
         OSX_SDK=10.9
 
     - compiler: ": Windows"
