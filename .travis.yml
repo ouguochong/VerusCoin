@@ -8,7 +8,7 @@
 
 sudo: required
 os: linux
-dist: bionic
+dist: xenial
 language: cpp
 compiler:
 - gcc
@@ -33,6 +33,8 @@ matrix:
         PACKAGES="build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev curl" PPA="ppa:chris-lea/zeromq"
 
     - compiler: ": Mac"
+      os: osx
+      osx_image: xcode9.2
       env: >
         HOST=x86_64-apple-darwin11
         TARGET=x86_64-apple-darwin
@@ -53,10 +55,10 @@ install:
   - if [ $TRAVIS_OS_NAME = linux ]; then travis_retry sudo apt-get -y update && sudo apt-get -y install -qq $PACKAGES; fi
   - if [ $TRAVIS_OS_NAME = linux ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH; fi
   - if [ $BSCRIPT = build-win.sh ]; then rustup target add $TARGET; fi
-  #- if [ $TRAVIS_OS_NAME = osx ]; then brew upgrade python; fi
-  #- if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew tap discoteq/discoteq && brew install flock; fi
-  #- if [ $TRAVIS_OS_NAME = osx ]; then rm '/usr/local/include/c++' && travis_retry brew tap homebrew/homebrew-core && brew install homebrew/homebrew-core/gcc@5 --overwrite gcc@5; fi
-  #- if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew update && brew install $PACKAGES; fi
+  - if [ $TRAVIS_OS_NAME = osx ]; then brew upgrade python; fi
+  - if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew tap discoteq/discoteq && brew install flock; fi
+  - if [ $TRAVIS_OS_NAME = osx ]; then rm '/usr/local/include/c++' && travis_retry brew tap homebrew/homebrew-core && brew install homebrew/homebrew-core/gcc@5 --overwrite gcc@5; fi
+  - if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew update && brew install $PACKAGES; fi
 
 before_script:
     - unset CC; unset CXX
