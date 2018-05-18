@@ -51,7 +51,7 @@ matrix:
 install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo rm -f /etc/apt/sources.list.d/travis_ci_zeromq3-source.list; fi
   - if [ $TRAVIS_OS_NAME = linux ]; then travis_retry sudo apt-get -y update && sudo apt-get -y install -qq $PACKAGES; fi
-  #- if [ $TRAVIS_OS_NAME = linux ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH; fi
   - if [ $BSCRIPT = build-win.sh ]; then rustup target add $TARGET; fi
   #- if [ $TRAVIS_OS_NAME = osx ]; then brew upgrade python; fi
   #- if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew tap discoteq/discoteq && brew install flock; fi
