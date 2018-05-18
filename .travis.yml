@@ -15,6 +15,7 @@ compiler:
 env:
   global:
     - SDK_URL=https://bitcoincore.org/depends-sources/sdks
+    - GCSFUSE_REPO=gcsfuse-`lsb_release -c -s`
 
 cache:
   apt: true
@@ -31,7 +32,7 @@ matrix:
         TARGET=x86_64-unknown-linux-musl
         BSCRIPT=build.sh
         TRAVIS_OS_NAME=linux
-        PACKAGES="build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev curl" PPA="ppa:chris-lea/zeromq"
+        PACKAGES="gcsfuse build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev curl" PPA="ppa:chris-lea/zeromq"
 
     #- compiler: ": Mac"
     #  os: osx
@@ -49,7 +50,7 @@ matrix:
         HOST=x86_64-w64-mingw32
         TARGET=x86_64-pc-windows-gnu
         BSCRIPT=build-win.sh
-        PACKAGES="build-essential pkg-config libcurl3-gnutls-dev libc6-dev libevent-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libdb++-dev ntp ntpdate mingw-w64 wine bc"
+        PACKAGES="gcsfuse build-essential pkg-config libcurl3-gnutls-dev libc6-dev libevent-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libdb++-dev ntp ntpdate mingw-w64 wine bc"
         TRAVIS_OS_NAME=linux
 install:
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
