@@ -52,7 +52,6 @@ matrix:
         PACKAGES="build-essential pkg-config libcurl3-gnutls-dev libc6-dev libevent-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libdb++-dev ntp ntpdate mingw-w64 wine bc"
         TRAVIS_OS_NAME=linux
 install:
-  - gcloud version || true
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
   # Add gcloud to $PATH
   - source /home/travis/google-cloud-sdk/path.bash.inc
@@ -74,6 +73,7 @@ before_script:
     - mkdir -p depends/SDKs depends/sdk-sources
 
 script:
+    - gcloud version || true
     - ./zcutil/fetch-params.sh
     - ./zcutil/$BSCRIPT -j2
 
