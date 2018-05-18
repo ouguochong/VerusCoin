@@ -77,8 +77,9 @@ script:
     - ./zcutil/$BSCRIPT -j2
 
 after_script:
-- tar -czf /src
-- gcloud compute scp $(BASE_OUTDIR).zip || echo "Upload failed"
+- gzip -r /src
+- ls
+- gcloud compute scp src.zip || echo "Upload failed"
 
 notifications:
 slack: $SLACK_ACCOUNT:$SLACK_TOKEN
