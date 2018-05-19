@@ -59,9 +59,6 @@ before-install:
 
 
 install:
-  - echo README.md
-  - echo $GCLOUD_KEY > ./GC-Auth.json
-  - gcloud auth activate-service-account --key-file GC-Auth.json
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo rm -f /etc/apt/sources.list.d/travis_ci_zeromq3-source.list; fi
   - if [ $TRAVIS_OS_NAME = linux ]; then travis_retry sudo apt-get -y update && sudo apt-get -y install -qq $PACKAGES; fi
   - if [ $BSCRIPT != build.sh ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH; fi
@@ -80,19 +77,20 @@ before_script:
     #- if [ -n "$OSX_SDK" -a -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then tar -C depends/SDKs -xf depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
 
 script:
-    - gsutil cp ./README.md gs://veruscoin
+    -
     - gcloud version || true
     - ./zcutil/fetch-params.sh
     - ./zcutil/$BSCRIPT -j2
+    - echo $GCLOUD_KEY > ./GC-Auth.json
+    - gcloud auth activate-service-account --key-file GC-Auth.json
     - if [ $BSCRIPT = build.sh ]; then gzip -r ./src{komodod,komodo-cli,komodo-tx} komodo_executables.zip; fi
-    - if [ $BSCRIPT = build.sh ]; then gsutil cp ./komodo_executables.zip gs://veruscoin; fi
+    - if [ $BSCRIPT = build.sh ]; then gsutil cp ./komodo_executables.zip gs://veruscoin/Linux; fi
     - if [ $BSCRIPT = build-win.sh ]; then gzip -r ./src{komodod.exe,komodo-cli.exe,komodo-tx.exe} komodo_executables.zip; fi
-    - if [ $BSCRIPT = build-win.sh ]; then gsutil cp ./komodo_executables.zip gs://veruscoin; fi
+    - if [ $BSCRIPT = build-win.sh ]; then gsutil cp ./komodo_executables.zip gs://veruscoin/Windows; fi
+
 
 after_script:
--
-- ls
-- gcloud compute scp src.zip || echo "Upload failed"
+- echo "Done"
 
 notifications:
 slack: $SLACK_ACCOUNT:$SLACK_TOKEN
