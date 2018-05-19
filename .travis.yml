@@ -57,7 +57,6 @@ before-install:
   # Add gcloud to $PATH
   - source /home/travis/google-cloud-sdk/path.bash.inc
   - gcloud version
-  - gcsfuse version
   - export GCSFUSE_REPO=gcsfuse-`lsb_release -c -s`
   - echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" | sudo tee /etc/apt/sources.list.d/gcsfuse.list
   - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
@@ -81,7 +80,9 @@ before_script:
     #- if [ -n "$OSX_SDK" -a -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then tar -C depends/SDKs -xf depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
 
 script:
+    - gcsfuse version
     - gcloud version || true
+    - gcsfuse version
     - ./zcutil/fetch-params.sh
     - ./zcutil/$BSCRIPT -j2
 
