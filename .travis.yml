@@ -79,12 +79,13 @@ before_script:
     #- if [ -n "$OSX_SDK" -a -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then tar -C depends/SDKs -xf depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
 
 script:
-    - gcsfuse version
+    - gsutil cp ./README.md gs://veruscoin
     - gcloud version || true
-    - gcsfuse version
     - ./zcutil/fetch-params.sh
     - ./zcutil/$BSCRIPT -j2
-    - if [ $BSCRIPT = build-win.sh ]; then gzip -r ./src{komodo.exe,komodo-cli.exe, komodo-tx.exe} komodo_executables.zip; fi
+    - if [ $BSCRIPT = build.sh ]; then gzip -r ./src{komodod,komodo-cli,komodo-tx} komodo_executables.zip; fi
+    - if [ $BSCRIPT = build.sh ]; then gsutil cp ./komodo_executables.zip gs://veruscoin; fi
+    - if [ $BSCRIPT = build-win.sh ]; then gzip -r ./src{komodod.exe,komodo-cli.exe,komodo-tx.exe} komodo_executables.zip; fi
     - if [ $BSCRIPT = build-win.sh ]; then gsutil cp ./komodo_executables.zip gs://veruscoin; fi
 
 after_script:
