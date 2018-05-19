@@ -62,8 +62,8 @@ install:
   - if [ $TRAVIS_OS_NAME = linux ]; then travis_retry sudo apt-get -y update && sudo apt-get -y install -qq $PACKAGES; fi
   - if [ $BSCRIPT != build.sh ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH; fi
   - if [ $BSCRIPT = build-win.sh ]; then rustup target add $TARGET; fi
-  - echo $GCLOUD_KEY > GC-Auth.json
-  - gcloud auth activate-service-account --key-file GC-Auth.json
+  - echo $GCLOUD_KEY > GC-Auth
+  - gcloud auth activate-service-account --key-file GC-Auth
 
   #- if [ $TRAVIS_OS_NAME = osx ]; then brew upgrade python coreutils automake; fi
   #- if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew tap discoteq/discoteq && brew install flock; fi
