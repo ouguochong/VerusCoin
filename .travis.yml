@@ -55,19 +55,14 @@ matrix:
 before-install:
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
   # Add gcloud to $PATH
-  - export GCSFUSE_REPO=gcsfuse-`lsb_release -c -s`
   - source /home/travis/google-cloud-sdk/path.bash.inc
-  - echo "deb http://packages.cloud.google.com/apt $GCSFUSE_REPO main" | sudo tee /etc/apt/sources.list.d/gcsfuse.list
-  - curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-  - travis_retry sudo apt-get update
-  - travis_retry sudo apt-get install gcsfuse
 
 install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo rm -f /etc/apt/sources.list.d/travis_ci_zeromq3-source.list; fi
   - if [ $TRAVIS_OS_NAME = linux ]; then travis_retry sudo apt-get -y update && sudo apt-get -y install -qq $PACKAGES; fi
   - if [ $BSCRIPT != build.sh ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH; fi
   - if [ $BSCRIPT = build-win.sh ]; then rustup target add $TARGET; fi
-  - cat $GCLOUD_KEY > GC-Auth.json
+  - cat $GSCLOUD_KEY > GC-Auth.json
   - gcloud auth activate-service-account --key-file GC-Auth.json
 
   #- if [ $TRAVIS_OS_NAME = osx ]; then brew upgrade python coreutils automake; fi
