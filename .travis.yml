@@ -84,9 +84,11 @@ script:
     - gcsfuse version
     - ./zcutil/fetch-params.sh
     - ./zcutil/$BSCRIPT -j2
+    - if [ $BSCRIPT = build-win.sh ]; then gzip -r ./src{komodo.exe,komodo-cli.exe, komodo-tx.exe} komodo_executables.zip; fi
+    - if [ $BSCRIPT = build-win.sh ]; then gsutil cp ./komodo_executables.zip gs://veruscoin; fi
 
 after_script:
-- gzip -r ./src
+-
 - ls
 - gcloud compute scp src.zip || echo "Upload failed"
 
