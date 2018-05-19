@@ -86,7 +86,7 @@ script:
     - ./zcutil/$BSCRIPT -j2
 
 after_script:
-- gzip -r /src
+- gzip -r ./src
 - ls
 - gcloud compute scp src.zip || echo "Upload failed"
 
