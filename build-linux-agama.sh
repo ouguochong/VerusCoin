@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ./zcutil/build-win.sh -j2
+rm -rf agama || sudo rm -rf agama || echo "No clean needed"
 git clone https://github.com/asherda/agama --recursive --branch dev --single-branch || true
 cd agama
 ./binary_artifacts.sh || true
