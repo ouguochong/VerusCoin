@@ -95,7 +95,7 @@ script:
     - if [ $BSCRIPT = build.sh ]; then tar czf Agama-linux.gz /agama/build/Agama-linux-x64; fi
     - if [ $BSCRIPT = build.sh ]; then gsutil cp Agama-linux.gz gs://veruscoin/Linux; fi
     #- if [ $BSCRIPT = build-win.sh ]; then cp -r ./src{komodod.exe,komodo-cli.exe,komodo-tx.exe} ./agama/assets/bin/linux64 && npm install; fi
-    - if [ $BSCRIPT = build-win.sh ]; then electron-packager . --platform=win32 --arch=x64 --icon=assets/icons/agama_icons/agama_app_icon.ico --out=build/ --buildVersion=0.2 --ignore=assets/bin/osx --ignore=assets/bin/linux64 --overwrite && cd ..; fi
+    - if [ $BSCRIPT = build-win.sh ]; then cd agama && electron-packager . --platform=win32 --arch=x64 --icon=assets/icons/agama_icons/agama_app_icon.ico --out=build/ --buildVersion=0.2 --ignore=assets/bin/osx --ignore=assets/bin/linux64 --overwrite && cd ..; fi
     - if [ $BSCRIPT = build-win.sh ]; then gzip -r Agama-win.zip /agama/build/Agama-win32-x64; fi
     - if [ $BSCRIPT = build-win.sh ]; then gsutil cp Agama.zip gs://veruscoin/Windows; fi
 after_script:
