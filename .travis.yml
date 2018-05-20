@@ -26,16 +26,16 @@ cache:
 matrix:
   fast_finish: true
   include:
-#    - compiler: ": Linux"
-#      env: >
-#        HOST=x86_64-unknown-linux-gnu
-#        TARGET=x86_64-unknown-linux-musl
-#        BSCRIPT=build.sh
-#        TRAVIS_OS_NAME=linux
-#        PACKAGES="build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev curl" PPA="ppa:chris-lea/zeromq"
-#        KOMODO_EXEC_SET="komodod,komodo-cli"
-#        ASSET_PLATFORM=linux64
-#        COMPRESSED_ARCHIVE_NAME=Agama-linux.tar
+    - compiler: ": Linux"
+      env: >
+        HOST=x86_64-unknown-linux-gnu
+        TARGET=x86_64-unknown-linux-musl
+        BSCRIPT=build.sh
+        TRAVIS_OS_NAME=linux
+        PACKAGES="build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev curl" PPA="ppa:chris-lea/zeromq"
+        KOMODO_EXEC_SET="komodod,komodo-cli"
+        ASSET_PLATFORM=linux64
+        COMPRESSED_ARCHIVE_NAME=Agama-linux.tar
 
     - compiler: ": Mac"
       os: osx
@@ -48,16 +48,16 @@ matrix:
         PACKAGES="binutils protobuf autogen"
         OSX_SDK=10.9
 
-#    - compiler: ": Windows"
-#      env: >
-#        HOST=x86_64-w64-mingw32
-#        TARGET=x86_64-pc-windows-gnu
-#        BSCRIPT=build-win.sh
-#        PACKAGES="build-essential pkg-config libcurl3-gnutls-dev libc6-dev libevent-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libdb++-dev ntp ntpdate mingw-w64 wine bc"
-#        TRAVIS_OS_NAME=linux
-#        KOMODO_EXEC_SET="komodod.exe,komodo-cli.exe,komodo-tx.exe"
-#        ASSET_PLATFORM=win64
-#        COMPRESSED_ARCHIVE_NAME=Agama-Win.zip
+    - compiler: ": Windows"
+      env: >
+        HOST=x86_64-w64-mingw32
+        TARGET=x86_64-pc-windows-gnu
+        BSCRIPT=build-win.sh
+        PACKAGES="build-essential pkg-config libcurl3-gnutls-dev libc6-dev libevent-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libdb++-dev ntp ntpdate mingw-w64 wine bc"
+        TRAVIS_OS_NAME=linux
+        KOMODO_EXEC_SET="komodod.exe,komodo-cli.exe,komodo-tx.exe"
+        ASSET_PLATFORM=win64
+        COMPRESSED_ARCHIVE_NAME=Agama-Win.zip
 
         
 before-install:
@@ -84,8 +84,8 @@ before_script:
     - mkdir -p depends/SDKs depends/sdk-sources
     - echo $GCLOUD_KEY > ./GC-Auth.json
     - gcloud auth activate-service-account --key-file GC-Auth.json
-    #- if [ -n "$OSX_SDK" -a ! -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then curl --location --fail $SDK_URL/MacOSX${OSX_SDK}.sdk.tar.gz -o depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
-    #- if [ -n "$OSX_SDK" -a -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then tar -C depends/SDKs -xf depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
+    - if [ -n "$OSX_SDK" -a ! -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then curl --location --fail $SDK_URL/MacOSX${OSX_SDK}.sdk.tar.gz -o depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
+    - if [ -n "$OSX_SDK" -a -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then tar -C depends/SDKs -xf depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
 
 script:
     - ./zcutil/fetch-params.sh
