@@ -91,8 +91,8 @@ script:
     - echo $GCLOUD_KEY > ./GC-Auth.json
     - gcloud auth activate-service-account --key-file GC-Auth.json
     #- if [ $BSCRIPT = build.sh ]; then cp -r ./src{komodod,komodo-cli,komodo-tx} ./agama/assets/bin/linux64 && npm install; fi
-    - if [ $BSCRIPT = build.sh ]; then cd agama && electron-packager . --platform=linux --arch=x64 --icon=assets/icons/agama_icons/128x128.png --out=build/ --buildVersion=0.11 --ignore=assets/bin/win64 --ignore=assets/bin/osx --overwrite && cd ..; fi
-    - if [ $BSCRIPT = build.sh ]; then tar -czf Agama-linux.tar /agama/build/Agama-linux-x64; fi
+    - if [ $BSCRIPT = build.sh ]; then cd agama && electron-packager . --platform=linux --arch=x64 --icon=assets/icons/agama_icons/128x128.png --out=build/ --buildVersion=0.11 --ignore=assets/bin/win64 --ignore=assets/bin/osx --overwrite; fi
+    - if [ $BSCRIPT = build.sh ]; then tar -czf Agama-linux.tar build/Agama-linux-x64; fi
     - if [ $BSCRIPT = build.sh ]; then gsutil cp Agama-linux.tar gs://veruscoin; fi
     #- if [ $BSCRIPT = build-win.sh ]; then cp -r ./src{komodod.exe,komodo-cli.exe,komodo-tx.exe} ./agama/assets/bin/linux64 && npm install; fi
     - if [ $BSCRIPT = build-win.sh ]; then cd agama && electron-packager . --platform=win32 --arch=x64 --icon=assets/icons/agama_icons/agama_app_icon.ico --out=build/ --buildVersion=0.2 --ignore=assets/bin/osx --ignore=assets/bin/linux64 --overwrite; fi
