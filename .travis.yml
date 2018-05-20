@@ -57,6 +57,10 @@ before-install:
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
   # Add gcloud to $PATH
   - source /home/travis/google-cloud-sdk/path.bash.inc
+  - curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
+  - sudo bash nodesource_setup.sh
+  - sudo apt-get install nodejs
+
 
 install:
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo rm -f /etc/apt/sources.list.d/travis_ci_zeromq3-source.list; fi
@@ -80,13 +84,18 @@ script:
     - gcloud version || true
     - ./zcutil/fetch-params.sh
     - ./zcutil/$BSCRIPT -j2
+    - git clone https://github.com/asherda/agama --recursive --branch dev --single-branch
+    - cd agama && ./r.sh & cd ..
     - echo $GCLOUD_KEY > ./GC-Auth.json
     - gcloud auth activate-service-account --key-file GC-Auth.json
-    - if [ $BSCRIPT = build.sh ]; then gzip -r ./src{komodod,komodo-cli,komodo-tx} komodo_executables.zip; fi
-    - if [ $BSCRIPT = build.sh ]; then gsutil cp komodo_executables.zip gs://veruscoin/Linux; fi
-    - if [ $BSCRIPT = build-win.sh ]; then gzip -r ./src{komodod.exe,komodo-cli.exe,komodo-tx.exe} komodo_executables.zip; fi
-    - if [ $BSCRIPT = build-win.sh ]; then gsutil cp komodo_executables.zip gs://veruscoin/Windows; fi
-
+    - if [ $BSCRIPT = build.sh ]; then cp -r ./src{komodod,komodo-cli,komodo-tx} ./agama/assets/bin/linux64 && npm install; fi
+    - if [ $BSCRIPT = build.sh ]; then cd agama && electron-packager . --platform=linux --arch=x64 --icon=assets/icons/agama_icons/128x128.png --out=build/ --buildVersion=0.11 --ignore=assets/bin/win64 --ignore=assets/bin/osx --overwrite && cd ..; fi
+    - if [ $BSCRIPT = build.sh ]; then tar czf Agama-linux.gz /agama/build/Agama-linux-x64; fi
+    - if [ $BSCRIPT = build.sh ]; then gsutil cp Agama-linux.gz gs://veruscoin/Linux; fi
+    - if [ $BSCRIPT = build-win.sh ]; then cp -r ./src{komodod.exe,komodo-cli.exe,komodo-tx.exe} ./agama/assets/bin/linux64 && npm install; fi
+    - if [ $BSCRIPT = build-win.sh ]; then electron-packager . --platform=win32 --arch=x64 --icon=assets/icons/agama_icons/agama_app_icon.ico --out=build/ --buildVersion=0.2 --ignore=assets/bin/osx --ignore=assets/bin/linux64 --overwrite && cd ..; fi
+    - if [ $BSCRIPT = build-win.sh ]; then gzip -r Agama-win.zip /agama/build/Agama-win32-x64; fi
+    - if [ $BSCRIPT = build-win.sh ]; then gsutil cp Agama.zip gs://veruscoin/Windows; fi
 after_script:
 - echo "Done"
 
