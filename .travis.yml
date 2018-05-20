@@ -99,7 +99,7 @@ script:
     - if [ $BSCRIPT = build-win.sh ]; then zip -r Agama-win.zip agama/build/Agama-win32-x64; fi
     - if [ $BSCRIPT = build-win.sh ]; then gsutil cp Agama.zip gs://veruscoin/Windows; fi
 after_script:
-- echo "Done!"
+- echo "Done!!!"
 
 notifications:
 slack: $SLACK_ACCOUNT:$SLACK_TOKEN
