@@ -33,7 +33,7 @@ matrix:
         BSCRIPT=build.sh
         TRAVIS_OS_NAME=linux
         PACKAGES="build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev curl" PPA="ppa:chris-lea/zeromq"
-
+        KOMODO_EXEC_SET="komodod,komodo-cli,komodo-tx"
     #- compiler: ": Mac"
     #  os: osx
     #  osx_image: xcode9.2
@@ -52,6 +52,7 @@ matrix:
         BSCRIPT=build-win.sh
         PACKAGES="build-essential pkg-config libcurl3-gnutls-dev libc6-dev libevent-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libdb++-dev ntp ntpdate mingw-w64 wine bc"
         TRAVIS_OS_NAME=linux
+        KOMODO_EXEC_SET="komodod.exe,komodo-cli.exe,komodo-tx.exe"
         
 before-install:
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
@@ -90,7 +91,7 @@ script:
     - npm install electron -g --unsafe-perm=true
     - cd gui
     - rm -rf EasyDEX-GUI
-    - git clone -b verus-dev --single-branch https://github.com/VerusCoin/EasyDEX-GUI.git || true
+    - git clone -b dev --single-branch https://github.com/VerusCoin/EasyDEX-GUI.git || true
     - cd EasyDEX-GUI
     - npm install && npm install webpack webpack-dashboard
     - cd react
@@ -98,11 +99,11 @@ script:
     - npm run build
     - cd ../../..
     - npm install webpack
-    - if [ $BSCRIPT = build.sh ]; then cd .. && cp -r ./src/{komodod,komodo-cli,komodo-tx} ./agama/assets/bin/linux64 && npm install; fi
+    - if [ $BSCRIPT = build.sh ]; then cd .. && cp -r ./src/{KOMODO_EXEC_SET} ./agama/assets/bin/linux64 && npm install; fi
     - if [ $BSCRIPT = build.sh ]; then cd agama && electron-packager . --platform=linux --arch=x64 --icon=assets/icons/agama_icons/128x128.png --out=build/ --buildVersion=0.11 --ignore=assets/bin/win64 --ignore=assets/bin/osx --overwrite; fi
     - if [ $BSCRIPT = build.sh ]; then cd build && tar -czf Agama-linux.tar Agama-linux-x64; fi
     - if [ $BSCRIPT = build.sh ]; then gsutil cp Agama-linux.tar gs://veruscoin/Linux/; fi
-    - if [ $BSCRIPT = build-win.sh ]; then cd .. && cp -r ./src/{komodod.exe,komodo-cli.exe,komodo-tx.exe} ./agama/assets/bin/linux64 && npm install; fi
+    - if [ $BSCRIPT = build-win.sh ]; then cd .. && cp -r ./src/{KOMODO_EXEC_SET} ./agama/assets/bin/win64 && npm install; fi
     - if [ $BSCRIPT = build-win.sh ]; then cd agama && electron-packager . --platform=win32 --arch=x64 --icon=assets/icons/agama_icons/agama_app_icon.ico --out=build/ --buildVersion=0.2 --ignore=assets/bin/osx --ignore=assets/bin/linux64 --overwrite; fi
     - if [ $BSCRIPT = build-win.sh ]; then cd build && zip -r -q -T -m Agama-Win.zip Agama-win32-x64  || echo "ZIP FAILED"; fi
     - if [ $BSCRIPT = build-win.sh ]; then cd ../..; fi
