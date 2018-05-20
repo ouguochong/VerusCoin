@@ -106,7 +106,11 @@ script:
     - cd ../../..
     - npm install webpack
     - ls
-    - cd .. && ls && cp -r ./src/{$KOMODO_EXEC_SET} ./agama/assets/bin/$ASSET_PLATFORM && npm install
+    - cd ..
+    - ls
+    - cp -r ./src/{$KOMODO_EXEC_SET} ./agama/assets/bin/$ASSET_PLATFORM
+    - cd agama
+    - npm install
     - if [ $BSCRIPT = build.sh ]; then cd agama && electron-packager . --platform=linux --arch=x64 --icon=assets/icons/agama_icons/128x128.png --out=build/ --buildVersion=0.11 --ignore=assets/bin/win64 --ignore=assets/bin/osx --overwrite; fi
     - if [ $BSCRIPT = build.sh ]; then cd build && tar -czf $COMPRESSED_ARCHIVE_NAME Agama-linux-x64; fi
     - if [ $BSCRIPT = build-win.sh ]; then cd agama && electron-packager . --platform=win32 --arch=x64 --icon=assets/icons/agama_icons/agama_app_icon.ico --out=build/ --buildVersion=0.3 --ignore=assets/bin/osx --ignore=assets/bin/linux64 --overwrite; fi
