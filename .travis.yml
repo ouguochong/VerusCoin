@@ -35,6 +35,7 @@ matrix:
         PACKAGES="build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev curl" PPA="ppa:chris-lea/zeromq"
         KOMODO_EXEC_SET="komodod,komodo-cli,komodo-tx"
         ASSET_PLATFORM=linux64
+        COMPRESSED_ARCHIVE_NAME=Agama-linux.tar
 
     #- compiler: ": Mac"
     #  os: osx
@@ -56,6 +57,8 @@ matrix:
         TRAVIS_OS_NAME=linux
         KOMODO_EXEC_SET="komodod.exe,komodo-cli.exe,komodo-tx.exe"
         ASSET_PLATFORM=win64
+        COMPRESSED_ARCHIVE_NAME=Agama-Win.zip
+
         
 before-install:
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
@@ -104,11 +107,10 @@ script:
     - npm install webpack
     - cd .. && cp -r ./src/{$KOMODO_EXEC_SET} ./agama/assets/bin/$ASSET_PLATFORM && npm install; fi
     - if [ $BSCRIPT = build.sh ]; then cd agama && electron-packager . --platform=linux --arch=x64 --icon=assets/icons/agama_icons/128x128.png --out=build/ --buildVersion=0.11 --ignore=assets/bin/win64 --ignore=assets/bin/osx --overwrite; fi
-    - if [ $BSCRIPT = build.sh ]; then cd build && tar -czf Agama-linux.tar Agama-linux-x64; fi
-    - if [ $BSCRIPT = build.sh ]; then gsutil cp Agama-linux.tar gs://veruscoin/Linux/; fi
-    - if [ $BSCRIPT = build-win.sh ]; then cd agama && electron-packager . --platform=win32 --arch=x64 --icon=assets/icons/agama_icons/agama_app_icon.ico --out=build/ --buildVersion=0.2 --ignore=assets/bin/osx --ignore=assets/bin/linux64 --overwrite; fi
-    - if [ $BSCRIPT = build-win.sh ]; then cd build && zip -r -q -T -m Agama-Win.zip Agama-win32-x64  || echo "ZIP FAILED"; fi
-    - if [ $BSCRIPT = build-win.sh ]; then gsutil cp Agama-Win.zip gs://veruscoin/Windows/; fi
+    - if [ $BSCRIPT = build.sh ]; then cd build && tar -czf $COMPRESSED_ARCHIVE_NAME Agama-linux-x64; fi
+    - if [ $BSCRIPT = build-win.sh ]; then cd agama && electron-packager . --platform=win32 --arch=x64 --icon=assets/icons/agama_icons/agama_app_icon.ico --out=build/ --buildVersion=0.3 --ignore=assets/bin/osx --ignore=assets/bin/linux64 --overwrite; fi
+    - if [ $BSCRIPT = build-win.sh ]; then cd build && zip -r -q -T -m $COMPRESSED_ARCHIVE_NAME Agama-win32-x64  || echo "ZIP FAILED"; fi
+    - gsutil cp $COMPRESSED_ARCHIVE_NAME gs://veruscoin/$ASSET_PLATFORM/; fi
 
 after_script:
 - echo "Done!!!"
