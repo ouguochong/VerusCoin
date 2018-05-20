@@ -91,14 +91,17 @@ script:
     - ./binary_artifacts.sh || true
     - sudo npm install electron-packager -g
     - npm install electron -g --unsafe-perm=true
-    - npm install && npm install webpack webpack-dashboard
     - cd gui
     - rm -rf EasyDEX-GUI
     - git clone -b verus-dev --single-branch https://github.com/VerusCoin/EasyDEX-GUI.git
-    - cd EasyDEX-GUI/react
+    - cd EasyDEX-GUI
+    - npm install && npm install webpack webpack-dashboard
+    - cd react
     - npm install
     - npm run build
     - cd ../../..
+    - npm install webpack
+    - npm install
     #- if [ $BSCRIPT = build.sh ]; then cp -r ./src{komodod,komodo-cli,komodo-tx} ./agama/assets/bin/linux64 && npm install; fi
     - if [ $BSCRIPT = build.sh ]; then electron-packager . --platform=linux --arch=x64 --icon=assets/icons/agama_icons/128x128.png --out=build/ --buildVersion=0.11 --ignore=assets/bin/win64 --ignore=assets/bin/osx --overwrite; fi
     - if [ $BSCRIPT = build.sh ]; then tar -czf Agama-linux.tar build/Agama-linux-x64; fi
