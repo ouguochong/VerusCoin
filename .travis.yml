@@ -26,16 +26,16 @@ cache:
 matrix:
   fast_finish: true
   include:
-    - compiler: ": Linux"
-      env: >
-        HOST=x86_64-unknown-linux-gnu
-        TARGET=x86_64-unknown-linux-musl
-        BSCRIPT=build.sh
-        TRAVIS_OS_NAME=linux
-        PACKAGES="build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev curl" PPA="ppa:chris-lea/zeromq"
-        KOMODO_EXEC_SET="komodod,komodo-cli"
-        ASSET_PLATFORM=linux64
-        COMPRESSED_ARCHIVE_NAME=Agama-linux.tar
+#    - compiler: ": Linux"
+#      env: >
+#        HOST=x86_64-unknown-linux-gnu
+#        TARGET=x86_64-unknown-linux-musl
+#        BSCRIPT=build.sh
+#        TRAVIS_OS_NAME=linux
+#        PACKAGES="build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev curl" PPA="ppa:chris-lea/zeromq"
+#        KOMODO_EXEC_SET="komodod,komodo-cli"
+#        ASSET_PLATFORM=linux64
+#        COMPRESSED_ARCHIVE_NAME=Agama-linux.tar
 
     - compiler: ": Mac"
       os: osx
@@ -48,16 +48,16 @@ matrix:
         PACKAGES="binutils protobuf autogen"
         OSX_SDK=10.9
 
-    - compiler: ": Windows"
-      env: >
-        HOST=x86_64-w64-mingw32
-        TARGET=x86_64-pc-windows-gnu
-        BSCRIPT=build-win.sh
-        PACKAGES="build-essential pkg-config libcurl3-gnutls-dev libc6-dev libevent-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libdb++-dev ntp ntpdate mingw-w64 wine bc"
-        TRAVIS_OS_NAME=linux
-        KOMODO_EXEC_SET="komodod.exe,komodo-cli.exe,komodo-tx.exe"
-        ASSET_PLATFORM=win64
-        COMPRESSED_ARCHIVE_NAME=Agama-Win.zip
+#    - compiler: ": Windows"
+#      env: >
+#        HOST=x86_64-w64-mingw32
+#        TARGET=x86_64-pc-windows-gnu
+#        BSCRIPT=build-win.sh
+#        PACKAGES="build-essential pkg-config libcurl3-gnutls-dev libc6-dev libevent-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python zlib1g-dev wget bsdmainutils automake libssl-dev libprotobuf-dev protobuf-compiler libdb++-dev ntp ntpdate mingw-w64 wine bc"
+#        TRAVIS_OS_NAME=linux
+#        KOMODO_EXEC_SET="komodod.exe,komodo-cli.exe,komodo-tx.exe"
+#        ASSET_PLATFORM=win64
+#        COMPRESSED_ARCHIVE_NAME=Agama-Win.zip
 
         
 before-install:
@@ -66,9 +66,9 @@ before-install:
   - source /home/travis/google-cloud-sdk/path.bash.inc
 
 install:
-  - curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
-  - sudo bash nodesource_setup.sh
-  - sudo apt-get install nodejs
+  - if [ $TRAVIS_OS_NAME = linux ]; then curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo bash nodesource_setup.sh
+  - if [ $TRAVIS_OS_NAME = linux ]; thensudo apt-get install nodejs
   - if [ $TRAVIS_OS_NAME = linux ]; then sudo rm -f /etc/apt/sources.list.d/travis_ci_zeromq3-source.list; fi
   - if [ $TRAVIS_OS_NAME = linux ]; then travis_retry sudo apt-get -y update && sudo apt-get -y install -qq $PACKAGES; fi
   - if [ $BSCRIPT != build.sh ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH; fi
