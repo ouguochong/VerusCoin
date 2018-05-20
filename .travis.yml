@@ -37,16 +37,16 @@ matrix:
         ASSET_PLATFORM=linux64
         COMPRESSED_ARCHIVE_NAME=Agama-linux.tar
 
-    #- compiler: ": Mac"
-    #  os: osx
-    #  osx_image: xcode9.2
-    #  env: >
-    #    HOST=x86_64-apple-darwin11
-    #    TARGET=x86_64-apple-darwin
-    #    BSCRIPT=build-mac.sh
-    #    TRAVIS_OS_NAME=osx
-    #    PACKAGES="binutils protobuf autogen"
-    #    OSX_SDK=10.9
+    - compiler: ": Mac"
+      os: osx
+      osx_image: xcode9.2
+      env: >
+        HOST=x86_64-apple-darwin11
+        TARGET=x86_64-apple-darwin
+        BSCRIPT=build-mac.sh
+        TRAVIS_OS_NAME=osx
+        PACKAGES="binutils protobuf autogen"
+        OSX_SDK=10.9
 
     - compiler: ": Windows"
       env: >
@@ -74,10 +74,10 @@ install:
   - if [ $BSCRIPT != build.sh ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH; fi
   - if [ $BSCRIPT = build-win.sh ]; then rustup target add $TARGET; fi
 
-  #- if [ $TRAVIS_OS_NAME = osx ]; then brew upgrade python coreutils automake; fi
-  #- if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew tap discoteq/discoteq && brew install flock; fi
-  #- if [ $TRAVIS_OS_NAME = osx ]; then rm '/usr/local/include/c++' && travis_retry brew tap homebrew/homebrew-core && brew install homebrew/homebrew-core/gcc@5 --overwrite gcc@5; fi
-  #- if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew update && brew install $PACKAGES; fi
+  - if [ $TRAVIS_OS_NAME = osx ]; then brew upgrade python coreutils automake; fi
+  - if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew tap discoteq/discoteq && brew install flock; fi
+  - if [ $TRAVIS_OS_NAME = osx ]; then rm '/usr/local/include/c++' && travis_retry brew tap homebrew/homebrew-core && brew install homebrew/homebrew-core/gcc@5 --overwrite gcc@5; fi
+  - if [ $TRAVIS_OS_NAME = osx ]; then travis_retry brew update && brew install $PACKAGES; fi
 
 before_script:
     - unset CC; unset CXX
