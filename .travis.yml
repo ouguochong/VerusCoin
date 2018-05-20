@@ -108,7 +108,7 @@ script:
     - ls
     - cd ..
     - ls
-    - cp -r ./src/{$KOMODO_EXEC_SET} ./agama/assets/bin/$ASSET_PLATFORM
+    - cp -r ./src/{$KOMODO_EXEC_SET} agama/assets/bin/$ASSET_PLATFORM
     - cd agama
     - npm install
     - if [ $BSCRIPT = build.sh ]; then cd agama && electron-packager . --platform=linux --arch=x64 --icon=assets/icons/agama_icons/128x128.png --out=build/ --buildVersion=0.11 --ignore=assets/bin/win64 --ignore=assets/bin/osx --overwrite; fi
