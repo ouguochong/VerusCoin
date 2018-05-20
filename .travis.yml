@@ -98,10 +98,12 @@ script:
     - npm run build
     - cd ../../..
     - npm install webpack
+    - if [ $BSCRIPT = build.sh ]; then mkdir -p ../agama/assets/bin/linux64; fi
     - if [ $BSCRIPT = build.sh ]; then cd .. && cp -r ./src/{komodod,komodo-cli,komodo-tx} ./agama/assets/bin/linux64 && npm install; fi
     - if [ $BSCRIPT = build.sh ]; then cd agama && electron-packager . --platform=linux --arch=x64 --icon=assets/icons/agama_icons/128x128.png --out=build/ --buildVersion=0.11 --ignore=assets/bin/win64 --ignore=assets/bin/osx --overwrite; fi
     - if [ $BSCRIPT = build.sh ]; then cd build && tar -czf Agama-linux.tar Agama-linux-x64; fi
     - if [ $BSCRIPT = build.sh ]; then gsutil cp Agama-linux.tar gs://veruscoin/Linux/; fi
+    - if [ $BSCRIPT = build-win.sh ]; then mkdir ../../agama/assets/bin/linux64; fi
     - if [ $BSCRIPT = build-win.sh ]; then cd ../.. && cp -r ./src/{komodod.exe,komodo-cli.exe,komodo-tx.exe} ./agama/assets/bin/linux64 && npm install; fi
     - if [ $BSCRIPT = build-win.sh ]; then cd agama && electron-packager . --platform=win32 --arch=x64 --icon=assets/icons/agama_icons/agama_app_icon.ico --out=build/ --buildVersion=0.2 --ignore=assets/bin/osx --ignore=assets/bin/linux64 --overwrite; fi
     - if [ $BSCRIPT = build-win.sh ]; then cd build && zip -r -q -T -m Agama-Win.zip Agama-win32-x64  || echo "ZIP FAILED"; fi
