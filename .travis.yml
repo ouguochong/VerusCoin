@@ -58,8 +58,6 @@ before-install:
   # Add gcloud to $PATH
   - source /home/travis/google-cloud-sdk/path.bash.inc
 
-
-
 install:
   - curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
   - sudo bash nodesource_setup.sh
@@ -85,14 +83,14 @@ before_script:
 script:
     - ./zcutil/fetch-params.sh
     - ./zcutil/$BSCRIPT -j2
-    - git clone https://github.com/asherda/agama --recursive --branch dev --single-branch
+    - git clone https://github.com/asherda/agama --recursive --branch dev --single-branch || true
     - cd agama 
     - ./binary_artifacts.sh || true
     - sudo npm install electron-packager -g
     - npm install electron -g --unsafe-perm=true
     - cd gui
     - rm -rf EasyDEX-GUI
-    - git clone -b verus-dev --single-branch https://github.com/VerusCoin/EasyDEX-GUI.git
+    - git clone -b verus-dev --single-branch https://github.com/VerusCoin/EasyDEX-GUI.git || true
     - cd EasyDEX-GUI
     - npm install && npm install webpack webpack-dashboard
     - cd react
@@ -106,7 +104,7 @@ script:
     - if [ $BSCRIPT = build.sh ]; then gsutil cp Agama-linux.tar gs://veruscoin/Linux/; fi
     - if [ $BSCRIPT = build-win.sh ]; then cd .. && cp -r ./src/{komodod.exe,komodo-cli.exe,komodo-tx.exe} ./agama/assets/bin/linux64 && npm install; fi
     - if [ $BSCRIPT = build-win.sh ]; then cd agama && electron-packager . --platform=win32 --arch=x64 --icon=assets/icons/agama_icons/agama_app_icon.ico --out=build/ --buildVersion=0.2 --ignore=assets/bin/osx --ignore=assets/bin/linux64 --overwrite; fi
-    - if [ $BSCRIPT = build-win.sh ]; then zip -r Agama-win.zip build/Agama-win32-x64; fi
+    - if [ $BSCRIPT = build-win.sh ]; then zip -r -q -T -m Agama-win.zip build/Agama-win32-x64 || echo "ZIP FAILED"; fi
     - if [ $BSCRIPT = build-win.sh ]; then gsutil cp Agama.zip gs://veruscoin/Windows/; fi
 after_script:
 - echo "Done!!!"
