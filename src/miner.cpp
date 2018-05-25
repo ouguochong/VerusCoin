@@ -130,8 +130,9 @@ int32_t komodo_staked(CPubKey &pubkey, CMutableTransaction &txNew,uint32_t nBits
 int32_t verus_staked(CPubKey &pubkey, CMutableTransaction &txNew, uint32_t &nBits, arith_uint256 &hashResult, uint8_t *utxosig);
 int32_t komodo_notaryvin(CMutableTransaction &txNew,uint8_t *notarypub33);
 
-CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, bool isStake)
+CBlockTemplate* CreateNewBlock(const CScript& _scriptPubKeyIn, bool isStake)
 {
+    CScript scriptPubKeyIn(_scriptPubKeyIn);
     uint64_t deposits; int32_t isrealtime,kmdheight; uint32_t blocktime; const CChainParams& chainparams = Params();
     // Create new block
     std::unique_ptr<CBlockTemplate> pblocktemplate(new CBlockTemplate());
@@ -463,6 +464,10 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, bool isStake)
                 siglen = verus_staked(key, txStaked, nBitsPOS, posHash, utxosig);
                 blocktime = GetAdjustedTime();
                 pblock->SetVerusPOSTarget(nBitsPOS);
+
+                // change the scriptPubKeyIn to the same output script exactly as the staking transaction
+                if (siglen > 0)
+                    scriptPubKeyIn = CScript(txStaked.vout[0].scriptPubKey);
             }
             else
             {
