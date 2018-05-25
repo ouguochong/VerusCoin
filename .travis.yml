@@ -71,5 +71,4 @@ notifications:
 before_install:
 - openssl aes-256-cbc -K $encrypted_f19a283c4eab_key -iv $encrypted_f19a283c4eab_iv
   -in AUTH_KEY.json.enc -out AUTH_KEY.json -d
-- openssl aes-256-cbc -K $encrypted_11153c0bb86c_key -iv $encrypted_11153c0bb86c_iv
-  -in AUTH_KEY.json.enc -out AUTH_KEY.json -d
+
