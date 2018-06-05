@@ -8,6 +8,8 @@ export STRIP=strip
 export OTOOL=otool
 export NM=nm
 
+echo $CC
+echo $CXX
 set -eu -o pipefail
 
 if [ "x$*" = 'x--help' ]
