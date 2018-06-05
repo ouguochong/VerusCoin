@@ -49,15 +49,12 @@ matrix:
                 && PREFIX="$(pwd)/depends/$TRIPLET"
 
     os: osx
+    stage: prepdeps
 
 install:
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint && brew bundle
   && gem install xcpretty; else travis_retry sudo -E apt-get -yq --no-install-suggests --no-install-recommends install autoconf automake bsdmainutils build-essential curl pkg-config libc6-dev m4 g++-multilib libtool ncurses-dev unzip python zlib1g-dev wget libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev mingw-w64 wine;
  fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then eval "${ENV_EVAL}"; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then make -C ./depends/ V=1 NO_QT=1 NO_PROTON=1 | xcpretty; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then ./autogen.sh | xcpretty; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then ./configure --prefix="${PREFIX}" --with-gui=no "$HARDENING_ARG" "$LCOV_ARG" | xcpretty; fi
 - if [ -n "$RUST_TARGET" ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh
   | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH
   && rustup target add $RUST_TARGET; fi
@@ -65,7 +62,11 @@ before_script:
 - unset CC; unset CXX
 script:
 - "./zcutil/fetch-params.sh"
-- eval "${BUILD_SCRIPT}"
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then eval "${ENV_EVAL}"; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then make -C ./depends/ V=1 NO_QT=1 NO_PROTON=1 | xcpretty; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then ./autogen.sh | xcpretty; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then ./configure --prefix="${PREFIX}" --with-gui=no "$HARDENING_ARG" "$LCOV_ARG" | xcpretty; fi
+
 after_script:
 - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then eval "${PACKAGING_MATRIX}" && gsutil
   cp $PACKAGE_NAME $STORAGE_DEST; fi
