@@ -1,12 +1,5 @@
 #!/bin/bash
-export CC=gcc
-export CXX=g++
-export LIBTOOL=libtool
-export AR=ar
-export RANLIB=ranlib
-export STRIP=strip
-export OTOOL=otool
-export NM=nm
+
 
 echo "$CC"
 echo "$CXX"
@@ -30,8 +23,7 @@ EOF
 fi
 
 # If --enable-lcov is the first argument, enable lcov coverage support:
-LCOV_ARG=''
-HARDENING_ARG='--disable-hardening'
+
 if [ "x${1:-}" = 'x--enable-lcov' ]
 then
     LCOV_ARG='--enable-lcov'
@@ -46,7 +38,7 @@ make "$@" -C ./depends/ V=1 NO_QT=1 NO_PROTON=1
 
 ./autogen.sh
 CPPFLAGS="-I$PREFIX/include -arch x86_64" LDFLAGS="-L$PREFIX/lib -arch x86_64 -Wl,-no_pie" \
-CXXFLAGS='-arch x86_64 -I/usr/local/Cellar/gcc/8.1.0/include/c++/8.1.0 -I$PREFIX/include -fwrapv -fno-strict-aliasing -Werror -g -Wl,-undefined -Wl,dynamic_lookup' \
+CXXFLAGS='-arch x86_64 -I/usr/local/Cellar/gcc@5/5.5.0_2/include/c++/5.5.0 -I$PREFIX/include -fwrapv -fno-strict-aliasing -Werror -g -Wl,-undefined -Wl,dynamic_lookup' \
 ./configure --prefix="${PREFIX}" --with-gui=no "$HARDENING_ARG" "$LCOV_ARG"
 
 make "$@" V=1 NO_GTEST=1 STATIC=1
