@@ -23,6 +23,8 @@ matrix:
           update: true
           sources:
           - ubuntu-toolchain-r-test
+          - sourceline: "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main"
+            key_url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
           packages:
           - autoconf
           - automake
@@ -58,6 +60,8 @@ matrix:
           update: true
           sources:
           - ubuntu-toolchain-r-test
+          - sourceline: "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main"
+            key_url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
           packages:
           - autoconf
           - automake
@@ -101,7 +105,7 @@ matrix:
                              cd kmd/mac &&
                              tar -czf verus-cli-mac.tar.gz verus-cli
 install:
-- if [ "$TRAVIS_OS" = "osx" ]; then brew cask uninstall oclint && brew bundle && gem install xcpretty; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint && brew bundle && gem install xcpretty; fi
 - if [ -n "$RUST_TARGET" ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh
   | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH && rustup target add $RUST_TARGET; fi
 before_script:
