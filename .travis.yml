@@ -55,6 +55,7 @@ install:
  fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then eval "${ENV_EVAL}"; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then make -C ./depends/ V=1 NO_QT=1 NO_PROTON=1 | xcpretty; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then ./autogen.sh | xcpretty; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then ./configure --prefix="${PREFIX}" --with-gui=no "$HARDENING_ARG" "$LCOV_ARG"; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then make V=1 NO_GTEST=1 STATIC=1; fi
 - if [ -n "$RUST_TARGET" ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh
