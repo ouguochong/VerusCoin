@@ -119,4 +119,4 @@ notifications:
 before_install:
 - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then openssl aes-256-cbc -K $encrypted_11153c0bb86c_key -iv $encrypted_11153c0bb86c_iv
   -in AUTH_KEY.json.enc -out AUTH_KEY.json -d; fi
-- rm AUTH_KEY.json.enc 
+- rm AUTH_KEY.json.enc
