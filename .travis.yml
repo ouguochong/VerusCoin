@@ -51,6 +51,7 @@ matrix:
           - google-cloud-sdk
       env: BUILD_SCRIPT="./zcutil/build.sh"
            CACHE_NAME=linux
+           CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
            PACKAGE_NAME=verus-cli-linux.tar.gz
            PACKAGING_MATRIX="cp src/komodod src/komodo-cli kmd/linux/verus-cli && chmod -R +x kmd/linux/verus-cli/ && cd kmd/linux && tar -czf $PACKAGE_NAME verus-cli"
     - os: linux
@@ -91,6 +92,7 @@ matrix:
           - wine
       env: RUST_TARGET=x86_64-pc-windows-gnu
            CACHE_NAME=windows
+           CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
            BUILD_SCRIPT="./zcutil/build-win.sh"
            PACKAGE_NAME=verus-cli-windows.zip
            PACKAGING_MATRIX="cp src/komodod.exe src/komodo-cli.exe src/komodo-tx.exe kmd/windows/verus-cli &&
