@@ -6,8 +6,6 @@ dist: xenial
 addons:
   apt:
     update: true
-    sources:
-    - ubuntu-toolchain-r-test
     packages:
     - libc6*
     - autoconf
