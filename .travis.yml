@@ -1,6 +1,39 @@
 language: cpp
 compiler: gcc
 sudo: false
+os: linux
+dist: xenial
+addons:
+  apt:
+    update: true
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - libc6*
+    - autoconf
+    - automake
+    - bsdmainutils
+    - build-essential
+    - curl
+    - pkg-config
+    - libc6-dev
+    - m4
+    - g++-multilib
+    - libtool
+    - ncurses-dev
+    - unzip
+    - python
+    - zlib1g-dev
+    - wget
+    - libssl-dev
+    - libprotobuf-dev
+    - protobuf-compiler
+    - libqrencode-dev
+    - libdb++-dev
+    - software-properties-common
+    - libcurl4-openssl-dev
+    - mingw-w64
+    - wine
 env:
   global:
   - CCACHE_SIZE=100M
@@ -18,88 +51,23 @@ cache:
 matrix:
   fast_finish: true
   include:
-  - os: linux
-    dist: xenial
-    addons:
-      apt:
-        update: true
-        sources:
-        - ubuntu-toolchain-r-test
-        packages:
-        - libc6*
-        - autoconf
-        - automake
-        - bsdmainutils
-        - build-essential
-        - curl
-        - pkg-config
-        - libc6-dev
-        - m4
-        - g++-multilib
-        - libtool
-        - ncurses-dev
-        - unzip
-        - python
-        - zlib1g-dev
-        - wget
-        - libssl-dev
-        - libprotobuf-dev
-        - protobuf-compiler
-        - libqrencode-dev
-        - libdb++-dev
-        - software-properties-common
-        - libcurl4-openssl-dev
-    env: BUILD_SCRIPT="./zcutil/build.sh" CACHE_NAME=linux CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
+  - env: BUILD_SCRIPT="./zcutil/build.sh" CACHE_NAME=linux CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
       -c -s)" PACKAGE_NAME=verus-cli-linux.tar.gz PACKAGING_MATRIX="cp src/komodod
       src/komodo-cli kmd/linux/verus-cli && chmod -R +x kmd/linux/verus-cli/ && cd
       kmd/linux && tar -czf $PACKAGE_NAME verus-cli"
-  - os: linux
-    dist: xenial
-    addons:
-      apt:
-        update: true
-        sources:
-        - ubuntu-toolchain-r-test
-        packages:
-        - libc6*
-        - autoconf
-        - automake
-        - bsdmainutils
-        - build-essential
-        - curl
-        - pkg-config
-        - libc6-dev
-        - libcurl3-gnutls-dev
-        - m4
-        - g++-multilib
-        - libtool
-        - ncurses-dev
-        - unzip
-        - python
-        - zlib1g-dev
-        - wget
-        - libssl-dev
-        - libprotobuf-dev
-        - protobuf-compiler
-        - libqrencode-dev
-        - libdb++-dev
-        - libcurl4-openssl-dev
-        - software-properties-common
-        - mingw-w64
-        - wine
-    env: RUST_TARGET=x86_64-pc-windows-gnu CACHE_NAME=windows CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
+  - env: RUST_TARGET=x86_64-pc-windows-gnu CACHE_NAME=windows CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
       -c -s)" BUILD_SCRIPT="./zcutil/build-win.sh" PACKAGE_NAME=verus-cli-windows.zip
       PACKAGING_MATRIX="cp src/komodod.exe src/komodo-cli.exe src/komodo-tx.exe kmd/windows/verus-cli
       && cd kmd/windows && zip -r9 $PACKAGE_NAME verus-cli && ls"
-  - os: osx
-    osx_image: xcode9.3
-    env: BUILD_SCRIPT="./zcutil/build-mac.sh | xcpretty" CACHE_NAME=osx TRIPLET=`./depends/config.guess`
+  - env: BUILD_SCRIPT="./zcutil/build-mac.sh | xcpretty" CACHE_NAME=osx TRIPLET=`./depends/config.guess`
       PREFIX="$(pwd)/depends/$TRIPLET" CPPFLAGS="-I$PREFIX/include -arch x86_64" LDFLAGS="-L$PREFIX/lib
       -arch x86_64 -Wl,-no_pie" CXXFLAGS='-arch x86_64 -I/usr/local/Cellar/gcc@5/5.5.0_2/include/c++/5.5.0
       -I$PREFIX/include -fwrapv -fno-strict-aliasing -Werror -g -Wl,-undefined -Wl,dynamic_lookup'
       PACKAGE_NAME=verus-cli-mac.tar.gz PACKAGING_MATRIX="cp src/komodod src/komodo-cli
       kmd/mac/verus-cli && chmod -R +x kmd/mac/verus-cli/ && cd kmd/mac && tar -czf
       verus-cli-mac.tar.gz verus-cli
+    os: osx
+    osx_image: xcode9.3
 install:
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint && brew bundle
   && gem install xcpretty; fi
