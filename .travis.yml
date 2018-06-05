@@ -99,7 +99,7 @@ matrix:
            PACKAGING_MATRIX="cp src/komodod src/komodo-cli kmd/mac/verus-cli &&
                              chmod -R +x kmd/mac/verus-cli/ &&
                              cd kmd/mac &&
-                             tar -czf verus-cli-mac.tar.gz verus-cli
+                             tar -czf verus-cli-mac.tar.gz verus-cli"
 install:
 - if [ "$TRAVIS_OS" = "osx"]; then brew cask uninstall oclint && brew bundle && gem install xcpretty; fi
 - if [ -n "$RUST_TARGET" ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh
