@@ -12,13 +12,14 @@ env:
 cache:
   apt: true
   directories:
-  - depends/built
+  - "depends/built"
   - "$HOME/.ccache"
+  - "/$HOME/.zcash-params/"
 matrix:
   fast_finish: true
   include:
   - os: linux
-    dist: trusty
+    dist: xenial
     addons:
       apt:
         update: true
@@ -53,7 +54,7 @@ matrix:
       src/komodo-cli kmd/linux/verus-cli && chmod -R +x kmd/linux/verus-cli/ && cd
       kmd/linux && tar -czf $PACKAGE_NAME verus-cli"
   - os: linux
-    dist: trusty
+    dist: xenial
     addons:
       apt:
         update: true
@@ -82,8 +83,8 @@ matrix:
         - protobuf-compiler
         - libqrencode-dev
         - libdb++-dev
+        - libcurl4-openssl-dev
         - software-properties-common
-        - libcurl-openssl-dev
         - mingw-w64
         - wine
     env: RUST_TARGET=x86_64-pc-windows-gnu CACHE_NAME=windows CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
