@@ -7,130 +7,117 @@ env:
   - CCACHE_TEMPDIR=/tmp/.ccache-temp
   - CCACHE_COMPRESS=1
   - STORAGE_DEST=gs://$BUCKET/$PROJECT/$TRAVIS_BRANCH/
+  - secure: hmFBLagVORo93H/aNMqyQ+Sy9DP3OKRa301bibjTxeD0CYtd6Ve9HyYKnGjWKyXEDmggWKwdw7+AHV/aB0K/FRerZTGiiIm9LPVbTkSWjEDqSxqECplhG7TxeK34B1QO4tKzRC5QepEYk3c1ll8KAiCrlUtFcgKmO/FPmOTwkEpRfGsqXrpeNLiZzS9BW9VIw+b+7DzQCPs6gSSA1mP1zY8qzCDpv5lXQyf7VH2brYv8vQqWlc6pgS6+WSdFynsYQFJ8+QwkAMXbqk1XWycEEcM7OFIKkShfLBSkrdVtmF6Lxcl+ZzHLOoMNlhAC2Xyiutlf7cjOWMrc2aD+XfY7xwInTae67q9PXnK7dILRKR7PXB8nzh8zyKRp2/bsfnwp7YgdnMs77E9SdsH+qBg9+aJsIjiHbiiaBbqDYPp3nvzupClMkpVE4nl96C76Dza7bbafSHuIydLrtKLYL2BfTkmd67YjY1hCErhYgIJzG41caYOI9Ze3agrF+UqpV/Qv/S6tJ3BRswSxEXVhntTcnftBcUeBc6e79fIK1SmnzDYurIMdfkbwrO7E4uPSeG90cH4D+vo4G9ssq5vECVl1m5ZE1zTWEmFjaA/HsO4JOm0+lHgh0cAklErOh89TaQroraIkEb7udLRbTf7t+KuYpbkaBBeQt58Xwni7p08yLMg=
+  - secure: YoAQnHPsdJM4A7UGQ5m1sjra4DXjor1fdYkAjxjb27A8M/vtCkNJ25kCDihwgGUEhyXNaSB1vlBm4k8dEShkEVr3MkcHvuUpWnXa//eXF9FXPSna7zV1pMQtdaBPX8cGQtyYO6aLGognY6jyg3HSX+rlF2S5jZBNdqENiwo6c5ts9raUhUTBbepsn2vzgC0D3INcQDooY7tI+GS2dtyXS8tUGMBge5TGHBpBiZXsDm4KMRr8zPJZmkYwUR1Obll+6UQTSrzDssDvw7067HJTHn3/mdNFoRY0nMdqOlc/qXi/gOpjqujl8V+r9ERZHG6+SMyiaGeTJnF/DqXHptE3M3BCdA6Ze7Art8/eKzCLK3CYcwBTZMNYPeEHu9OPgZGNFlATWFOjSxlY48C8TO2DjBdKX0ClzdAWqlkSFJhaOD2gMebWVeKWQGe2Aq9qGTtGQEfDctoxjKCDxpTYK7ahISLLT1zrLXWsMbxjH84iax4eaNKK0mOK/Gh0wjHJlIbHx0Es8IRPnmh3aSog2J82xLDnok5Vlw+Iqfh3u0sHT1jiSsyKj0KLPtP1g4o7K+DOuooognoe2AB412sBrVpunyii8atyWDbK/546EcvSk3EuVV9k5/2Iptt0h2yooX1ab9hcrZwTr9aVVJp5KhF8PpG+lo6CA7eRJpvWsXtoweE=
 cache:
   apt: true
   directories:
   - depends/built
-  - "$HOME/google-cloud-sdk/"
   - "$HOME/.ccache"
 matrix:
   fast_finish: true
   include:
-    - os: linux
-      dist: trusty
-      addons:
-        apt:
-          update: true
-          sources:
-          - ubuntu-toolchain-r-test
-          - sourceline: "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main"
-            key_url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
-          packages:
-          - libc6*
-          - autoconf
-          - automake
-          - bsdmainutils
-          - build-essential
-          - curl
-          - pkg-config
-          - libc6-dev
-          - m4
-          - g++-multilib
-          - libtool
-          - ncurses-dev
-          - unzip
-          - python
-          - zlib1g-dev
-          - wget
-          - libssl-dev
-          - libprotobuf-dev
-          - protobuf-compiler
-          - libqrencode-dev
-          - libdb++-dev
-          - software-properties-common
-          - libcurl4-openssl-dev
-          - google-cloud-sdk
-      env: BUILD_SCRIPT="./zcutil/build.sh"
-           CACHE_NAME=linux
-           CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-           PACKAGE_NAME=verus-cli-linux.tar.gz
-           PACKAGING_MATRIX="cp src/komodod src/komodo-cli kmd/linux/verus-cli && chmod -R +x kmd/linux/verus-cli/ && cd kmd/linux && tar -czf $PACKAGE_NAME verus-cli"
-    - os: linux
-      dist: trusty
-      addons:
-        apt:
-          update: true
-          sources:
-          - ubuntu-toolchain-r-test
-          - sourceline: "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main"
-            key_url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
-          packages:
-          - libc6*
-          - autoconf
-          - automake
-          - bsdmainutils
-          - build-essential
-          - curl
-          - pkg-config
-          - libc6-dev
-          - libcurl3-gnutls-dev
-          - m4
-          - g++-multilib
-          - libtool
-          - ncurses-dev
-          - unzip
-          - python
-          - zlib1g-dev
-          - wget
-          - libssl-dev
-          - libprotobuf-dev
-          - protobuf-compiler
-          - libqrencode-dev
-          - libdb++-dev
-          - software-properties-common
-          - libcurl-openssl-dev
-          - google-cloud-sdk
-          - mingw-w64
-          - wine
-      env: RUST_TARGET=x86_64-pc-windows-gnu
-           CACHE_NAME=windows
-           CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-           BUILD_SCRIPT="./zcutil/build-win.sh"
-           PACKAGE_NAME=verus-cli-windows.zip
-           PACKAGING_MATRIX="cp src/komodod.exe src/komodo-cli.exe src/komodo-tx.exe kmd/windows/verus-cli &&
-           cd kmd/windows && zip -r9 $PACKAGE_NAME verus-cli && ls"
-    - os: osx
-      osx_image: xcode9.3
-      env: BUILD_SCRIPT="./zcutil/build-mac.sh -j2 | xcpretty"
-           CACHE_NAME=osx
-           TRIPLET=`./depends/config.guess`
-           PREFIX="$(pwd)/depends/$TRIPLET"
-           CPPFLAGS="-I$PREFIX/include -arch x86_64" LDFLAGS="-L$PREFIX/lib -arch x86_64 -Wl,-no_pie"
-           CXXFLAGS='-arch x86_64 -I/usr/local/Cellar/gcc@5/5.5.0_2/include/c++/5.5.0 -I$PREFIX/include -fwrapv -fno-strict-aliasing -Werror -g -Wl,-undefined -Wl,dynamic_lookup'
-           PACKAGE_NAME=verus-cli-mac.tar.gz
-           PACKAGING_MATRIX="cp src/komodod src/komodo-cli kmd/mac/verus-cli &&
-                             chmod -R +x kmd/mac/verus-cli/ &&
-                             cd kmd/mac &&
-                             tar -czf verus-cli-mac.tar.gz verus-cli
+  - os: linux
+    dist: trusty
+    addons:
+      apt:
+        update: true
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - libc6*
+        - autoconf
+        - automake
+        - bsdmainutils
+        - build-essential
+        - curl
+        - pkg-config
+        - libc6-dev
+        - m4
+        - g++-multilib
+        - libtool
+        - ncurses-dev
+        - unzip
+        - python
+        - zlib1g-dev
+        - wget
+        - libssl-dev
+        - libprotobuf-dev
+        - protobuf-compiler
+        - libqrencode-dev
+        - libdb++-dev
+        - software-properties-common
+        - libcurl4-openssl-dev
+    env: BUILD_SCRIPT="./zcutil/build.sh" CACHE_NAME=linux CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
+      -c -s)" PACKAGE_NAME=verus-cli-linux.tar.gz PACKAGING_MATRIX="cp src/komodod
+      src/komodo-cli kmd/linux/verus-cli && chmod -R +x kmd/linux/verus-cli/ && cd
+      kmd/linux && tar -czf $PACKAGE_NAME verus-cli"
+  - os: linux
+    dist: trusty
+    addons:
+      apt:
+        update: true
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - libc6*
+        - autoconf
+        - automake
+        - bsdmainutils
+        - build-essential
+        - curl
+        - pkg-config
+        - libc6-dev
+        - libcurl3-gnutls-dev
+        - m4
+        - g++-multilib
+        - libtool
+        - ncurses-dev
+        - unzip
+        - python
+        - zlib1g-dev
+        - wget
+        - libssl-dev
+        - libprotobuf-dev
+        - protobuf-compiler
+        - libqrencode-dev
+        - libdb++-dev
+        - software-properties-common
+        - libcurl-openssl-dev
+        - mingw-w64
+        - wine
+    env: RUST_TARGET=x86_64-pc-windows-gnu CACHE_NAME=windows CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
+      -c -s)" BUILD_SCRIPT="./zcutil/build-win.sh" PACKAGE_NAME=verus-cli-windows.zip
+      PACKAGING_MATRIX="cp src/komodod.exe src/komodo-cli.exe src/komodo-tx.exe kmd/windows/verus-cli
+      && cd kmd/windows && zip -r9 $PACKAGE_NAME verus-cli && ls"
+  - os: osx
+    osx_image: xcode9.3
+    env: BUILD_SCRIPT="./zcutil/build-mac.sh | xcpretty" CACHE_NAME=osx TRIPLET=`./depends/config.guess`
+      PREFIX="$(pwd)/depends/$TRIPLET" CPPFLAGS="-I$PREFIX/include -arch x86_64" LDFLAGS="-L$PREFIX/lib
+      -arch x86_64 -Wl,-no_pie" CXXFLAGS='-arch x86_64 -I/usr/local/Cellar/gcc@5/5.5.0_2/include/c++/5.5.0
+      -I$PREFIX/include -fwrapv -fno-strict-aliasing -Werror -g -Wl,-undefined -Wl,dynamic_lookup'
+      PACKAGE_NAME=verus-cli-mac.tar.gz PACKAGING_MATRIX="cp src/komodod src/komodo-cli
+      kmd/mac/verus-cli && chmod -R +x kmd/mac/verus-cli/ && cd kmd/mac && tar -czf
+      verus-cli-mac.tar.gz verus-cli
 install:
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint && brew bundle && gem install xcpretty; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint && brew bundle
+  && gem install xcpretty; fi
 - if [ -n "$RUST_TARGET" ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh
-  | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH && rustup target add $RUST_TARGET; fi
+  | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH
+  && rustup target add $RUST_TARGET; fi
 before_script:
 - unset CC; unset CXX
 script:
-- ./zcutil/fetch-params.sh
+- "./zcutil/fetch-params.sh"
 - eval "${BUILD_SCRIPT}"
 after_script:
-- if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then gcloud auth activate-service-account --key-file AUTH_KEY.json && rm AUTH_KEY.json; fi
-- if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then eval "${PACKAGING_MATRIX}" &&
-  gsutil cp $PACKAGE_NAME $STORAGE_DEST; fi
+- if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then eval "${PACKAGING_MATRIX}" && gsutil
+  cp $PACKAGE_NAME $STORAGE_DEST; fi
 notifications:
   slack:
     secure: FiVlFhSw5xnDu1Cx2yAo3J7miFCSRyuzR/2+8LKFjdWl5+fyIGvQ9x5vgUg6dWbv3UP9iIMqQuWfotsg8H+NE8pYRZQ0zDVxZ5h9+PA028qGb3OF4TMFNcltP5DGtAZ6AqrMNRZ4ltatPUm5H9ig1bhzjsx+3pqlqQuVXTXPjaUryB5s/fk2CjrsV6zTLfPHiI30jeMjmQrJJLik1vSWF70sB6HkQhvaT6jymkO4Vuh+cja418W1xIgkkoRsOXiZ/JK4hIypFo/sBkmIOprGqoFUahFqJlsBoSrp9iAzkwbDItIqqvNCHTEeN7lj6kK43ZK72E4etjjNc0CXWeleXBJBCj5Prq2lEkQ4NwuDTos3KLyyr2vI7f54xhb5+wjzY9dByHXGuG5UaNz0+uukuJinAdazGaNmmfesv1wg9p3jGa/TLsfHLMcUti875DzkUHnenivP5cXrc6/uuZyyQNq5+Gn/3DA8k0y7d1e23nm3nDjCNfATAn3yu1jieYY2yYI6CYGEXcD+UbP61uG6no+mm/lkQbQosyDfE0sADqGryqXswRste+R0sSVMBQtTipAZOUoYNbEmhN4+L78SSp3zpmgkrIxAw7le8oj6Evp2ofvE2Kvh+Z0MVoEJx6mtZI6hheIFSS38NeUZr/HBfRSpaElOYTN/ZNf8QwThCWo=
-before_install:
-- if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then openssl aes-256-cbc -K $encrypted_11153c0bb86c_key -iv $encrypted_11153c0bb86c_iv
-  -in AUTH_KEY.json.enc -out AUTH_KEY.json -d; fi
-- rm AUTH_KEY.json.enc
-
-
+deploy:
+  provider: gcs
+  access_key_id: "$GCS_IAK_ID"
+  secret_access_key: "$GCS_IAK_SECRET"
+  bucket: "$BUCKET"

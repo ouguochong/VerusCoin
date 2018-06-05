@@ -21,7 +21,7 @@ if [ -d "${PASSED}" ] ; then
         exit 0
     fi
 else
-    echo "Pass the Agama-darwin-x64 directory on the command line."
+    echo "Pass the Agama-linux-x64 directory on the command line."
     echo "${PASSED} is not a valid directory.";
     exit 1
 fi
