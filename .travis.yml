@@ -1,8 +1,8 @@
 language: cpp
 compiler: gcc
-sudo: false
+sudo: required
 os: linux
-dist: trusty
+dist: xenial
 
 
 env:
