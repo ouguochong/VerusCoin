@@ -110,6 +110,7 @@ script:
 - ./zcutil/fetch-params.sh
 - eval "${BUILD_SCRIPT}"
 after_script:
+- if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then gcloud auth activate-service-account --key-file AUTH_KEY.json && rm AUTH_KEY.json; fi
 - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then eval "${PACKAGING_MATRIX}" &&
   gsutil cp $PACKAGE_NAME $STORAGE_DEST; fi
 notifications:
@@ -118,7 +119,6 @@ notifications:
 before_install:
 - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then openssl aes-256-cbc -K $encrypted_11153c0bb86c_key -iv $encrypted_11153c0bb86c_iv
   -in AUTH_KEY.json.enc -out AUTH_KEY.json -d; fi
-- if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then gcloud auth activate-service-account --key-file AUTH_KEY.json && rm AUTH_KEY.json; fi
 - rm AUTH_KEY.json.enc
 
 
