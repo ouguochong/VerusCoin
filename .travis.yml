@@ -77,5 +77,9 @@ deploy:
   access_key_id: "$GCS_IAK_ID"
   secret_access_key: "$GCS_IAK_SECRET"
   bucket: "$BUCKET"
+  skip_cleanup: true
+  acl: private
+  detect_encoding: true
+  local-dir: kmd
   on:
       branch: CI
