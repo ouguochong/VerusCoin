@@ -17,7 +17,7 @@ matrix:
   fast_finish: true
   include:
     - os: linux
-      dist: xenial
+      dist: trusty
       addons:
         apt:
           update: true
@@ -52,7 +52,7 @@ matrix:
            PACKAGE_NAME=verus-cli-linux.tar.gz
            PACKAGING_MATRIX="cp src/komodod src/komodo-cli kmd/linux/verus-cli && chmod -R +x kmd/linux/verus-cli/ && cd kmd/linux && tar -czf $PACKAGE_NAME verus-cli"
     - os: linux
-      dist: xenial
+      dist: trusty
       addons:
         apt:
           update: true
@@ -101,7 +101,7 @@ matrix:
                              cd kmd/mac &&
                              tar -czf verus-cli-mac.tar.gz verus-cli
 install:
-- if [ "$TRAVIS_OS" = "osx"]; then brew cask uninstall oclint && brew bundle && gem install xcpretty; fi
+- if [ "$TRAVIS_OS" = "osx" ]; then brew cask uninstall oclint && brew bundle && gem install xcpretty; fi
 - if [ -n "$RUST_TARGET" ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh
   | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH && rustup target add $RUST_TARGET; fi
 before_script:
