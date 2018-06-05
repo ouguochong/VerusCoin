@@ -52,7 +52,7 @@ matrix:
     osx_image: xcode9.3
 install:
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint && brew bundle
-  && gem install xcpretty; else travis_retry sudo -E apt-get -yq --no-install-suggests --no-install-recommends install libc6* autoconf automake bsdmainutils build-essential curl pkg-config libc6-dev m4 g++-multilib libtool ncurses-dev unzip python zlib1g-dev wget libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev mingw-w64 wine;
+  && gem install xcpretty; else travis_retry sudo -E apt-get -yq --no-install-suggests --no-install-recommends install autoconf automake bsdmainutils build-essential curl pkg-config libc6-dev m4 g++-multilib libtool ncurses-dev unzip python zlib1g-dev wget libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev mingw-w64 wine;
  fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then eval "${ENV_EVAL}"; fi
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then make -C ./depends/ V=1 NO_QT=1 NO_PROTON=1 | xcpretty; fi
