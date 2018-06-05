@@ -49,7 +49,6 @@ matrix:
                 && PREFIX="$(pwd)/depends/$TRIPLET"
 
     os: osx
-    osx_image: xcode9.3
 install:
 - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint && brew bundle
   && gem install xcpretty; else travis_retry sudo -E apt-get -yq --no-install-suggests --no-install-recommends install autoconf automake bsdmainutils build-essential curl pkg-config libc6-dev m4 g++-multilib libtool ncurses-dev unzip python zlib1g-dev wget libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev mingw-w64 wine;
