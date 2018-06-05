@@ -26,6 +26,7 @@ matrix:
           - sourceline: "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main"
             key_url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
           packages:
+          - libc6*
           - autoconf
           - automake
           - bsdmainutils
@@ -55,7 +56,7 @@ matrix:
            PACKAGE_NAME=verus-cli-linux.tar.gz
            PACKAGING_MATRIX="cp src/komodod src/komodo-cli kmd/linux/verus-cli && chmod -R +x kmd/linux/verus-cli/ && cd kmd/linux && tar -czf $PACKAGE_NAME verus-cli"
     - os: linux
-      dist: trusty
+      dist: xenial
       addons:
         apt:
           update: true
@@ -64,6 +65,7 @@ matrix:
           - sourceline: "deb http://packages.cloud.google.com/apt cloud-sdk-$(lsb_release -c -s) main"
             key_url: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
           packages:
+          - libc6*
           - autoconf
           - automake
           - bsdmainutils
@@ -101,6 +103,10 @@ matrix:
       osx_image: xcode9.3
       env: BUILD_SCRIPT="./zcutil/build-mac.sh -j2 | xcpretty"
            CACHE_NAME=osx
+           TRIPLET=`./depends/config.guess`
+           PREFIX="$(pwd)/depends/$TRIPLET"
+           CPPFLAGS="-I$PREFIX/include -arch x86_64" LDFLAGS="-L$PREFIX/lib -arch x86_64 -Wl,-no_pie"
+           CXXFLAGS='-arch x86_64 -I/usr/local/Cellar/gcc@5/5.5.0_2/include/c++/5.5.0 -I$PREFIX/include -fwrapv -fno-strict-aliasing -Werror -g -Wl,-undefined -Wl,dynamic_lookup'
            PACKAGE_NAME=verus-cli-mac.tar.gz
            PACKAGING_MATRIX="cp src/komodod src/komodo-cli kmd/mac/verus-cli &&
                              chmod -R +x kmd/mac/verus-cli/ &&
