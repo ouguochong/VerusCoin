@@ -49,12 +49,6 @@ matrix:
                 && PREFIX="$(pwd)/depends/$TRIPLET"
 
     os: osx
-    stage: prepdeps
-    script: - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint && brew bundle && gem install xcpretty &&
-    eval "${ENV_EVAL}" && make -C ./depends/ V=1 NO_QT=1 NO_PROTON=1 | xcpretty && ./autogen.sh | xcpretty && ./configure --prefix="${PREFIX}" --with-gui=no "$HARDENING_ARG" "$LCOV_ARG" | xcpretty; fi
-    stage: build
-    script: - if [ "$TRAVIS_OS_NAME" = "osx" ]; then make V=1 NO_GTEST=1 STATIC=1; fi
-
 install:
 
 - if [ -n "$RUST_TARGET" ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh
@@ -64,9 +58,9 @@ before_script:
 - unset CC; unset CXX
 script:
 - "./zcutil/fetch-params.sh"
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then ; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then ; fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then ; fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint && brew bundle && gem install xcpretty &&
+    eval "${ENV_EVAL}";fi
+- if [ "$TRAVIS_OS_NAME" = "osx" ]; then make V=1 NO_GTEST=1 STATIC=1; fi
 
 after_script:
 - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then eval "${PACKAGING_MATRIX}" && gsutil
