@@ -21,16 +21,34 @@ cache:
   - "/$HOME/.zcash-params/"
 matrix:
   fast_finish: true
+jobs:
   include:
-  - env: BUILD_SCRIPT="./zcutil/build.sh" CACHE_NAME=linux CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
-      -c -s)" PACKAGE_NAME=verus-cli-linux.tar.gz PACKAGING_MATRIX="cp src/komodod
-      src/komodo-cli kmd/linux/verus-cli && chmod -R +x kmd/linux/verus-cli/ && cd
-      kmd/linux && tar -czf $PACKAGE_NAME verus-cli"
-  - env: RUST_TARGET=x86_64-pc-windows-gnu CACHE_NAME=windows CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
+  - stage: Build_1
+    env: BUILD_SCRIPT="./zcutil/build.sh" CACHE_NAME=linux CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
+        -c -s)" PACKAGE_NAME=verus-cli-linux.tar.gz PACKAGING_MATRIX="cp src/komodod
+        src/komodo-cli kmd/linux/verus-cli && chmod -R +x kmd/linux/verus-cli/ && cd
+        kmd/linux && tar -czf $PACKAGE_NAME verus-cli"
+    install: travis_retry sudo -E apt-get -yq --no-install-suggests --no-install-recommends install autoconf automake bsdmainutils build-essential curl pkg-config libc6-dev m4 g++-multilib libtool ncurses-dev unzip python zlib1g-dev wget libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev
+    before_script: unset CC; unset CXX
+    script: ./zcutil/fetch-params.sh && eval "${BUILD_SCRIPT}"
+    after_script: if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then eval "${PACKAGING_MATRIX}" && gsutil
+      cp $PACKAGE_NAME $STORAGE_DEST; fi
+
+  - stage: Build_1
+    env: RUST_TARGET=x86_64-pc-windows-gnu CACHE_NAME=windows CLOUD_SDK_REPO="cloud-sdk-$(lsb_release
       -c -s)" BUILD_SCRIPT="./zcutil/build-win.sh" PACKAGE_NAME=verus-cli-windows.zip
       PACKAGING_MATRIX="cp src/komodod.exe src/komodo-cli.exe src/komodo-tx.exe kmd/windows/verus-cli
-      && cd kmd/windows && zip -r9 $PACKAGE_NAME verus-cli"
-  - env: BUILD_SCRIPT="./zcutil/build-mac.sh | xcpretty" CACHE_NAME=osx TRIPLET=`./depends/config.guess`
+      && cd kmd/windows && zip -r9 $PACKAGE_NAME verus-cli" HOST=x86_64-w64-mingw32 ENV_EVAL=CXX="x86_64-w64-mingw32-g++-posix
+                                                                                    CC=x86_64-w64-mingw32-gcc-posix"
+    install:  travis_retry sudo -E apt-get -yq --no-install-suggests --no-install-recommends install autoconf automake bsdmainutils build-essential curl pkg-config libc6-dev m4 g++-multilib libtool ncurses-dev unzip python zlib1g-dev wget libssl-dev libprotobuf-dev protobuf-compiler libqrencode-dev libdb++-dev software-properties-common libcurl4-openssl-dev mingw-w64 wine && curl -sSf https://build.travis-ci.org/files/rustup-init.sh
+               | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH
+               && rustup target add $RUST_TARGET
+    before_script: unset CC; unset CXX
+    script: ./zcutil/fetch-params.sh && eval "${BUILD_SCRIPT}"
+    after_script: if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then eval "${PACKAGING_MATRIX}" && gsutil
+      cp $PACKAGE_NAME $STORAGE_DEST; fi
+  - stage: Build_1
+    env: CACHE_NAME=osx TRIPLET=`./depends/config.guess`
       PREFIX="$(pwd)/depends/$TRIPLET" CPPFLAGS="-I$PREFIX/include -arch x86_64" LDFLAGS="-L$PREFIX/lib
       -arch x86_64 -Wl,-no_pie" CXXFLAGS='-arch x86_64 -I/usr/local/Cellar/gcc@5/5.5.0_2/include/c++/5.5.0
       -I$PREFIX/include -fwrapv -fno-strict-aliasing -Werror -g -Wl,-undefined -Wl,dynamic_lookup'
@@ -49,33 +67,33 @@ matrix:
                 && PREFIX="$(pwd)/depends/$TRIPLET"
 
     os: osx
-install:
+    install: brew cask uninstall oclint && brew bundle && gem install xcpretty
+    before_script: unset CC; unset CXX
+    script: eval "${ENV_EVAL}" && ./autogen.sh | xcpretty && ./configure --prefix="${PREFIX}" --with-gui=no "$HARDENING_ARG" "$LCOV_ARG"
+  - stage: Build_2
+    env: CACHE_NAME=osx TRIPLET=`./depends/config.guess`
+      PREFIX="$(pwd)/depends/$TRIPLET" CPPFLAGS="-I$PREFIX/include -arch x86_64" LDFLAGS="-L$PREFIX/lib
+      -arch x86_64 -Wl,-no_pie" CXXFLAGS='-arch x86_64 -I/usr/local/Cellar/gcc@5/5.5.0_2/include/c++/5.5.0
+      -I$PREFIX/include -fwrapv -fno-strict-aliasing -Werror -g -Wl,-undefined -Wl,dynamic_lookup'
+      PACKAGE_NAME=verus-cli-mac.tar.gz PACKAGING_MATRIX="cp src/komodod src/komodo-cli
+      kmd/mac/verus-cli && chmod -R +x kmd/mac/verus-cli/ && cd kmd/mac && tar -czf
+      verus-cli-mac.tar.gz verus-cli" LCOV_ARG='' HARDENING_ARG='--disable-hardening'
+      ENV_EVAL="export CC=gcc-5
+                && CXX=g++-5
+                && LIBTOOL=libtool
+                && AR=ar
+                && RANLIB=ranlib
+                && STRIP=strip
+                && OTOOL=otool
+                && NM=nm
+                && TRIPLET=`./depends/config.guess`
+                && PREFIX="$(pwd)/depends/$TRIPLET"
 
-- if [ -n "$RUST_TARGET" ]; then curl -sSf https://build.travis-ci.org/files/rustup-init.sh
-  | sh -s -- --default-toolchain stable -y && export PATH=$PATH:$HOME/.cargo/bin:$PATH
-  && rustup target add $RUST_TARGET; fi
-before_script:
-- unset CC; unset CXX
-script:
-- "./zcutil/fetch-params.sh"
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint && brew bundle && gem install xcpretty &&
-    eval "${ENV_EVAL}";fi
-- if [ "$TRAVIS_OS_NAME" = "osx" ]; then make V=1 NO_GTEST=1 STATIC=1; fi
-
-after_script:
-- if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then eval "${PACKAGING_MATRIX}" && gsutil
-  cp $PACKAGE_NAME $STORAGE_DEST; fi
+    os: osx
+    script: eval "${ENV_EVAL}" && make V=1 NO_GTEST=1 STATIC=1 | xcpretty
+    after_script: if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then eval "${PACKAGING_MATRIX}" && gsutil
+      cp $PACKAGE_NAME $STORAGE_DEST; fi
 notifications:
   slack:
     secure: FiVlFhSw5xnDu1Cx2yAo3J7miFCSRyuzR/2+8LKFjdWl5+fyIGvQ9x5vgUg6dWbv3UP9iIMqQuWfotsg8H+NE8pYRZQ0zDVxZ5h9+PA028qGb3OF4TMFNcltP5DGtAZ6AqrMNRZ4ltatPUm5H9ig1bhzjsx+3pqlqQuVXTXPjaUryB5s/fk2CjrsV6zTLfPHiI30jeMjmQrJJLik1vSWF70sB6HkQhvaT6jymkO4Vuh+cja418W1xIgkkoRsOXiZ/JK4hIypFo/sBkmIOprGqoFUahFqJlsBoSrp9iAzkwbDItIqqvNCHTEeN7lj6kK43ZK72E4etjjNc0CXWeleXBJBCj5Prq2lEkQ4NwuDTos3KLyyr2vI7f54xhb5+wjzY9dByHXGuG5UaNz0+uukuJinAdazGaNmmfesv1wg9p3jGa/TLsfHLMcUti875DzkUHnenivP5cXrc6/uuZyyQNq5+Gn/3DA8k0y7d1e23nm3nDjCNfATAn3yu1jieYY2yYI6CYGEXcD+UbP61uG6no+mm/lkQbQosyDfE0sADqGryqXswRste+R0sSVMBQtTipAZOUoYNbEmhN4+L78SSp3zpmgkrIxAw7le8oj6Evp2ofvE2Kvh+Z0MVoEJx6mtZI6hheIFSS38NeUZr/HBfRSpaElOYTN/ZNf8QwThCWo=
-deploy:
-  provider: gcs
-  access_key_id: "$GCS_IAK_ID"
-  secret_access_key: "$GCS_IAK_SECRET"
-  bucket: "$BUCKET"
-  skip_cleanup: true
-  acl: private
-  detect_encoding: true
-  local-dir: kmd
-  on:
-      branch: CI
+
