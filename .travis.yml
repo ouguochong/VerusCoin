@@ -69,8 +69,7 @@ jobs:
     os: osx
     install: brew cask uninstall oclint && brew bundle && gem install xcpretty
     before_script: unset CC; unset CXX
-    script: eval "${ENV_EVAL}" && make "$@" -C ./depends/ V=1 NO_QT=1 NO_PROTON=1 &&
-    ./autogen.sh | xcpretty && ./configure --prefix="${PREFIX}" --with-gui=no "$HARDENING_ARG" "$LCOV_ARG"
+    script: eval "${ENV_EVAL}" && make "$@" -C ./depends/ V=1 NO_QT=1 NO_PROTON=1 && ./autogen.sh | xcpretty && ./configure --prefix="${PREFIX}" --with-gui=no "$HARDENING_ARG" "$LCOV_ARG"
   - stage: Build_2
     env: CACHE_NAME=osx TRIPLET=`./depends/config.guess`
       PREFIX="$(pwd)/depends/$TRIPLET" CPPFLAGS="-I$PREFIX/include -arch x86_64" LDFLAGS="-L$PREFIX/lib
