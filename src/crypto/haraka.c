@@ -113,6 +113,7 @@ void test_implementations() {
 }
 
 void haraka256(unsigned char *out, const unsigned char *in) {
+/*
   __m128i s[2], tmp;
 
   s[0] = LOAD(in);
@@ -138,9 +139,11 @@ void haraka256(unsigned char *out, const unsigned char *in) {
 
   STORE(out, s[0]);
   STORE(out + 16, s[1]);
+*/
 }
 
 void haraka256_4x(unsigned char *out, const unsigned char *in) {
+/*
   __m128i s[4][2], tmp;
 
   s[0][0] = LOAD(in);
@@ -210,9 +213,11 @@ void haraka256_4x(unsigned char *out, const unsigned char *in) {
   STORE(out + 80, s[2][1]);
   STORE(out + 96, s[3][0]);
   STORE(out + 112, s[3][1]);
+*/
 }
 
 void haraka256_8x(unsigned char *out, const unsigned char *in) {
+/*
   // This is faster on Skylake, the code below is faster on Haswell.
   haraka256_4x(out, in);
   haraka256_4x(out + 128, in + 128);
@@ -333,9 +338,11 @@ void haraka256_8x(unsigned char *out, const unsigned char *in) {
   // STORE(out + 208, s[6][1]);
   // STORE(out + 224, s[7][0]);
   // STORE(out + 240, s[7][1]);
+*/
 }
 
 void haraka512(unsigned char *out, const unsigned char *in) {
+/*
   u128 s[4], tmp;
 
   s[0] = LOAD(in);
@@ -364,9 +371,11 @@ void haraka512(unsigned char *out, const unsigned char *in) {
   s[3] = _mm_xor_si128(s[3], LOAD(in + 48));
 
   TRUNCSTORE(out, s[0], s[1], s[2], s[3]);
+*/
 }
 
 void haraka512_zero(unsigned char *out, const unsigned char *in) {
+/*
   u128 s[4], tmp;
 
   s[0] = LOAD(in);
@@ -395,9 +404,11 @@ void haraka512_zero(unsigned char *out, const unsigned char *in) {
   s[3] = _mm_xor_si128(s[3], LOAD(in + 48));
 
   TRUNCSTORE(out, s[0], s[1], s[2], s[3]);
+*/
 }
 
 void haraka512_4x(unsigned char *out, const unsigned char *in) {
+/*
   u128 s[4][4], tmp;
 
   s[0][0] = LOAD(in);
@@ -469,9 +480,11 @@ void haraka512_4x(unsigned char *out, const unsigned char *in) {
   TRUNCSTORE(out + 32, s[1][0], s[1][1], s[1][2], s[1][3]);
   TRUNCSTORE(out + 64, s[2][0], s[2][1], s[2][2], s[2][3]);
   TRUNCSTORE(out + 96, s[3][0], s[3][1], s[3][2], s[3][3]);
+*/
 }
 
 void haraka512_8x(unsigned char *out, const unsigned char *in) {
+/*
   // This is faster on Skylake, the code below is faster on Haswell.
   haraka512_4x(out, in);
   haraka512_4x(out + 128, in + 256);
@@ -603,4 +616,5 @@ void haraka512_8x(unsigned char *out, const unsigned char *in) {
   // TRUNCSTORE(out + 160, s[5][0], s[5][1], s[5][2], s[5][3]);
   // TRUNCSTORE(out + 192, s[6][0], s[6][1], s[6][2], s[6][3]);
   // TRUNCSTORE(out + 224, s[7][0], s[7][1], s[7][2], s[7][3]);
+*/
 }
