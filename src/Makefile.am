@@ -43,6 +43,7 @@ LIBBITCOIN_CLI=libbitcoin_cli.a
 LIBBITCOIN_UTIL=libbitcoin_util.a
 LIBBITCOIN_CRYPTO=crypto/libbitcoin_crypto.a
 LIBVERUS_CRYPTO=crypto/libverus_crypto.a
+LIBVERUS_PORTABLE_CRYPTO=crypto/libverus_portable_crypto.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 LIBCRYPTOCONDITIONS=cryptoconditions/libcryptoconditions_core.la
 LIBSNARK=snark/libsnark.a
@@ -75,6 +76,7 @@ $(LIBCRYPTOCONDITIONS): $(wildcard cryptoconditions/src/*) $(wildcard cryptocond
 EXTRA_LIBRARIES = \
   crypto/libbitcoin_crypto.a \
   crypto/libverus_crypto.a \
+  crypto/libverus_portable_crypto.a \
   libbitcoin_util.a \
   libbitcoin_common.a \
   libbitcoin_server.a \
@@ -394,9 +396,9 @@ crypto_libverus_crypto_a_SOURCES = \
   crypto/haraka.c
 
 # Verus hash specific library - portable
-crypto_libverus_crypto_portable_a_CPPFLAGS = -O3 -Wint-conversion -march=k8-sse3 -g -funroll-loops -fomit-frame-pointer -fPIC $(AM_CPPFLAGS)
-crypto_libverus_crypto_portable_a_CXXFLAGS = -O3 -Wint-conversion -march=k8-sse3 -g -funroll-loops -fomit-frame-pointer -fPIC $(AM_CXXFLAGS)
-crypto_libverus_crypto_portable_a_SOURCES = \
+crypto_libverus_portable_crypto_a_CPPFLAGS = -O3 -Wint-conversion -march=k8-sse3 -g -funroll-loops -fomit-frame-pointer -fPIC $(AM_CPPFLAGS)
+crypto_libverus_portable_crypto_a_CXXFLAGS = -O3 -Wint-conversion -march=k8-sse3 -g -funroll-loops -fomit-frame-pointer -fPIC $(AM_CXXFLAGS)
+crypto_libverus_portable_crypto_a_SOURCES = \
   crypto/haraka_portable.h \
   crypto/haraka_portable.c
 
@@ -494,6 +496,7 @@ komodod_LDADD = \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBVERUS_CRYPTO) \
+  $(LIBVERUS_PORTABLE_CRYPTO) \
   $(LIBZCASH) \
   $(LIBSNARK) \
   $(LIBLEVELDB) \
@@ -518,6 +521,7 @@ komodod_LDADD += \
   $(EVENT_LIBS) \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBVERUS_CRYPTO) \
+  $(LIBVERUS_PORTABLE_CRYPTO) \
   $(LIBZCASH_LIBS)
 
 if ENABLE_PROTON
@@ -553,6 +557,7 @@ komodo_cli_LDADD = \
 	$(LIBZCASH) \
 	$(LIBBITCOIN_CRYPTO) \
   $(LIBVERUS_CRYPTO) \
+  $(LIBVERUS_PORTABLE_CRYPTO) \
 	$(LIBZCASH_LIBS)
 
 if ENABLE_WALLET
@@ -561,6 +566,7 @@ wallet_utility_LDADD = \
 	$(LIBBITCOIN_COMMON) \
 	$(LIBBITCOIN_CRYPTO) \
   $(LIBVERUS_CRYPTO) \
+  $(LIBVERUS_PORTABLE_CRYPTO) \
 	$(LIBSECP256K1) \
 	$(LIBBITCOIN_UTIL) \
 	$(BOOST_LIBS) \
@@ -592,6 +598,7 @@ komodo_tx_LDADD = \
   $(LIBSNARK) \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBVERUS_CRYPTO) \
+  $(LIBVERUS_PORTABLE_CRYPTO) \
   $(LIBZCASH_LIBS) \
   $(LIBCRYPTOCONDITIONS)
 
